@@ -1,0 +1,92 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.tigerbk'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.3'
+
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+    // jddb 아래 2개한쌍
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
+    implementation 'org.modelmapper:modelmapper:3.1.1'
+    implementation 'commons-io:commons-io:2.11.0'
+
+    // mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    implementation "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+
+    implementation 'org.springframework.data:spring-data-envers:3.1.4'
+
+    // log4j2
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-jcl:2.20.0'
+    testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
+
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+    //Gson|| Json
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    // java.lang.ClassNotFoundException: javax.xml.bind.DatatypeConverter 에러로 추가해준다.
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootJar {
+    mainClass = 'com.tigerbk.project1.Project1Application'
+    archiveFileName = 'project1.jar'
+}

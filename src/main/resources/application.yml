@@ -1,0 +1,111 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+app:
+  auth:
+    token-secret: bkinvestmentbytigerbkbkinvestmentbytigerbkbkinvestmentbytigerbkbkinvestmentbytigerbkbkinvestmentbytigerbkbkinvestmentbytigerbk
+
+spring:
+  # profiles:
+  #   include: oauth
+  # tomcat:
+  #   use-relative-redirects: true
+  application:
+    name: Pro1_Server
+  servlet:
+    multipart:
+      enabled: true
+      location: /Users/bk/work/app
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://211.45.167.195:3306/db_1?useUnicode=true&characterEncoding=utf-8
+    hikari:
+      username: db_user1
+      password: aaaAAA111!!!
+      connection-test-query: SELECT 1
+      auto-commit: false
+      minimum-idle: 50
+      maximum-pool-size: 50
+      transaction-isolation: TRANSACTION_READ_UNCOMMITTED
+      connection-timeout: 5000
+      validation-timeout: 2000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    database: mysql
+    generate-ddl: false
+    open-in-view: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # ???? ???? ??
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+
+  output.ansi.enabled: always
+  devtools:
+    livereLoad:
+      enabled: true
+
+file:
+  uploadDir: ${user.home}/jimkwon
+
+logging:
+  #  file:
+  #    name: /data/mobility/logs/mobility.log
+  level:
+    com:
+      tigerbk: DEBUG
+    web: INFO
+    jdbc:
+      resultset: ERROR
+      audit: 'OFF'
+      resultsettable: INFO
+      sqltiming: DEBUG
+      sqlonly: 'OFF'
+      sql: DEBUG
+      connection: ERROR
+    org:
+      zalando:
+        logbook: TRACE
+      hibernate:
+        SQL: DEBUG
+        type: trace
+
+
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    groups:
+      enabled: true
+    path: /api-docs
+    enabled: true
+  cache:
+    disabled: true # swagger cache ??
+  swagger-ui:
+    config-url: /api/api-docs/swagger-config
+    url: /api/api-docs
+    operations-sorter: method # alpha(??? ????), method(HTTP????)
+    tags-sorter: alpha # ?? ?? ??
+    path: /swagger-ui.html # html ?? ?? ??
+    disable-swagger-default-url: true
+    #   display-query-params-without-oauth2: true
+    doc-expansion: none # tag, operation ??? ?? ["list", "full", "none"]
+    display-request-duration: true
+    persist-authorization: true
+    syntax-highlight:
+      theme: "obsidian" # "arta">?/? "obsidian">?/?
+  paths-to-match: # OpenAPI 3 ? ???? api path ???
+    - /**
+  #packages-to-scan: com.tigerbk.authcommon
+  show-actuator: true
