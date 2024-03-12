@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
   servlet:
     context-path: /api
 app:
@@ -12,7 +12,7 @@ spring:
   # tomcat:
   #   use-relative-redirects: true
   application:
-    name: Pro1_Server
+    name: project1_server
   servlet:
     multipart:
       enabled: true

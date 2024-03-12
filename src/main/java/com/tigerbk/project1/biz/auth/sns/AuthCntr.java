@@ -36,7 +36,7 @@ public class AuthCntr {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = SignInResCvo.class))),
     })
-    @GetMapping("/login/oauth2/web/{registrationId}")
+    @GetMapping("/oauth2/web/{registrationId}")
     public ResponseEntity<?> redirectWEB(
 
             @PathVariable("registrationId") String registrationId,
@@ -56,7 +56,7 @@ public class AuthCntr {
      */
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "App 에서 인증후 제공업체로 부터 Redirect URL", description = "Oaut2를 통해 로그인 후 호출되는  서비스")
-    @GetMapping("/login/oauth2/mobile/{registrationId}")
+    @GetMapping("/oauth2/mobile/{registrationId}")
     public ResponseEntity<Object> redirectMobliie2(
 
             @PathVariable("registrationId") String registrationId,

@@ -44,7 +44,7 @@ public class SecurityConfig {
             "/webjars/**",            "/swagger-ui.html"
     };
     private final String[] UI = {
-            "/login/**",              "/auth/**",
+            "/oauth2/**",              "/auth/**",
             "/css/**",                "/img/**",
             "/static/**",             "/resources/**",
             "/comm/code/**",          "/asis/**",
