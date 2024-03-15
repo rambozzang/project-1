@@ -23,12 +23,12 @@ public class OAS3Config {
     final String securitySchemeName = "bearerAuth";
     Info info = new Info()
         .version("v1.0.0")
-        .title("TigerBk Project1 Project")
-        .description("이름:전범규 / 토큰 : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJtZW1iSWQiOiJ0aWdlcmJrIiwiaXNBZG1pbiI6Ik4iLCJhdXRoTWV0aG9kIjoiTiIsImV4cCI6MTcyNTYxOTcxOX0.-pQqbA2dbuKz8YajXiJumltqmTFIMIYboj3juO2Ic6obe1Pphnmr4APHUzYTZOsThyYnPknXVabkUrRPFl8X3w");
+        .title("Kos Project1 Project")
+        .description("이름: 홍길동  / 토큰 : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJtZW1iSWQiOiJ0aWdlcmJrIiwiaXNBZG1pbiI6Ik4iLCJhdXRoTWV0aG9kIjoiTiIsImV4cCI6MTcyNTYxOTcxOX0.-pQqbA2dbuKz8YajXiJumltqmTFIMIYboj3juO2Ic6obe1Pphnmr4APHUzYTZOsThyYnPknXVabkUrRPFl8X3w");
 
     Server server = new Server().url(servletContext.getContextPath());
     log.debug("########################################################################");
-    log.debug("### App-Woori-Server OpenAPI30Configuration Configuration");
+    log.debug("### Project1-Server OpenAPI30Configuration Configuration");
     log.debug("########################################################################");
     return new OpenAPI()
         .info(info)
@@ -40,7 +40,8 @@ public class OAS3Config {
                 .name(securitySchemeName)
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
-                .bearerFormat("JWT"))
+                .bearerFormat("JWT")
+                )
         );
   }
 }

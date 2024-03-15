@@ -59,6 +59,8 @@ public class SecurityConfig {
         log.debug("#########    ----------- Auth SecurityFilterChain --------------  ######");
         log.debug("#########    ----------- Application Name : "+ appName + " --------------  ######");
 
+
+
         http.httpBasic().disable()
             .csrf().disable()
             .headers().frameOptions().disable()

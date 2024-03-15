@@ -30,22 +30,22 @@ public class JwtUtil {
     // private static final Long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 1 * 60 * 1L; // 1 분
     // private static final Long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 2 * 60  *1L; // 2분
 
-    public String getAccessToken(String membId ) {
+    public String getAccessToken(String custId ) {
 
         // log.debug("========================================" );
         // log.debug("getAccessToken =========================" );
-        // log.debug("membNo : " + membNo );
+        // log.debug("custId : " + custId );
         // log.debug("========================================" );
 
         HashMap<String, Object> claim = new HashMap<>();
-        claim.put("membId"      , membId);
+        claim.put("custId"      , custId);
         claim.put("authMethod"  , 'N');
         claim.put("isAdmin"     , "N");
         return makeJwt("ACCESS_TOKEN", ACCESS_TOKEN_EXPIRATION_TIME, claim);
     }
-    public String getRefreshToken(String membId ) {
+    public String getRefreshToken(String custId ) {
         HashMap<String, Object> claim = new HashMap<>();
-        claim.put("membId"      , membId);
+        claim.put("custId"      , custId);
         claim.put("authMethod"  , 'N');
         claim.put("isAdmin"     , "N");
         // claim.put("roles", roles);  // List<String> roles

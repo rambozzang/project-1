@@ -20,16 +20,16 @@ public class TbCustMaster {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "MEMB_ID", nullable = false, length = 100)
-    private String membId;
+    @Column(name = "CUST_ID", nullable = false, length = 100)
+    private String custId;
 
     @Size(max = 100)
     @Column(name = "NICK_NM", length = 100)
     private String nickNm;
 
     @Size(max = 100)
-    @Column(name = "MEMB_NM", length = 100)
-    private String membNm;
+    @Column(name = "CUST_NM", length = 100)
+    private String custNm;
 
     @Size(max = 100)
     @Column(name = "EMAIL", length = 100)

@@ -21,10 +21,10 @@ public class UserPrincipal implements UserDetails {
     private final String seq;
 
     @Getter
-    private final String membId;
+    private final String custId;
 
     @Getter
-    private final String membNm;
+    private final String custNm;
 
 //    @Getter
 //    private final String nickNm;
@@ -36,9 +36,9 @@ public class UserPrincipal implements UserDetails {
             String userId,
             String userNm,
             Collection<? extends GrantedAuthority> authorities) {
-        this.membId = userId;
+        this.custId = userId;
         this.seq = seq;
-        this.membNm = userNm;
+        this.custNm = userNm;
         this.authorities = authorities;
     }
 
@@ -46,9 +46,9 @@ public class UserPrincipal implements UserDetails {
         List<GrantedAuthority> authorities =
                 Collections.singletonList(new SimpleGrantedAuthority(Role.USER.toString()));
         return new UserPrincipal(
-                user.getMembId(),
+                user.getCustId(),
                 user.getId().toString(),
-                user.getMembNm() == null ? user.getNickNm() : user.getMembNm(),
+                user.getCustNm() == null ? user.getNickNm() : user.getCustNm(),
                 authorities);
     }
 
@@ -72,7 +72,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return membNm;
+        return custNm;
     }
 
     @Override

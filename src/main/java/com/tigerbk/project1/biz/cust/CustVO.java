@@ -18,13 +18,13 @@ public class CustVO {
         @Schema(description = "fcmId", example = "1")
         private String fcmId;
 
-        /**  membId  */
+        /**  custId  */
         @Schema(description = "seq", example = "1")
-        private String membId;
+        private String custId;
 
         /**  membNm  */
         @Schema(description = "membNm", example = "1")
-        private String membNm;
+        private String custNm;
 
         /**  nickNm  */
         @Schema(description = "nickNm", example = "1")

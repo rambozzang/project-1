@@ -57,11 +57,11 @@ spring:
       enabled: true
 
 file:
-  uploadDir: ${user.home}/jimkwon
+  uploadDir: /Users/bk/work/app
 
 logging:
-  #  file:
-  #    name: /data/mobility/logs/mobility.log
+  file:
+    name: /data/logs/project1/project1.log
   level:
     com:
       tigerbk: DEBUG

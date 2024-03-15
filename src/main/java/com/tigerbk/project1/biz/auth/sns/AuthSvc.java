@@ -90,7 +90,7 @@ public class AuthSvc {
         // 3. refreshToken 조차 만료인 경우 다시 로그인 처리 유도 하기 위해 에러 발급하지 않는다.
         String userId = (String) jwtUtil.get(tokenRequest.getRefreshToken()).get("userId");
         String provider = (String) jwtUtil.get(tokenRequest.getRefreshToken()).get("provider");
-        if (!userRepository.existsByMembId(userId)) {
+        if (!userRepository.existsByCustId(userId)) {
             throw new BadRequestException("사용자 정보를 찾을 수 없습니다!");
         }
 
