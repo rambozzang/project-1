@@ -29,6 +29,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+
+// https://developers.kakao.com/console/app/856419/product/login/advanced
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -76,14 +78,14 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
             String refreshToken = jwtUtil.getRefreshToken(String.valueOf(kakaoUserInfo.getId()));
 
-            if (!userRepository.existsByMembId(String.valueOf(kakaoUserInfo.getId()))) {
+            if (!userRepository.existsByCustId(String.valueOf(kakaoUserInfo.getId()))) {
 
                 var dto = TbCustMasterDto.builder()
-                        .membId(Long.toString(kakaoUserInfo.getId()))
+                        .custId(Long.toString(kakaoUserInfo.getId()))
                         .provider(AuthProvider.KAKAO.name())
                         .birthday(kakaoUserInfo.getKakaoAccount().getBirthday())
                         .email(kakaoUserInfo.getKakaoAccount().getEmail())
-                        .membNm(StringUtils.hasText(kakaoUserInfo.getKakaoAccount().getName()) ? kakaoUserInfo.getKakaoAccount().getName() : kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
+                        .custNm(StringUtils.hasText(kakaoUserInfo.getKakaoAccount().getName()) ? kakaoUserInfo.getKakaoAccount().getName() : kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
                         .nickNm(kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
                         .hpNo(kakaoUserInfo.getKakaoAccount().getPhoneNumber())
                         .profilePath(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
@@ -124,14 +126,14 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
             String refreshToken = jwtUtil.getRefreshToken(String.valueOf(kakaoUserInfo.getId()));
 
-            if (!userRepository.existsByMembId(String.valueOf(kakaoUserInfo.getId()))) {
+            if (!userRepository.existsByCustId(String.valueOf(kakaoUserInfo.getId()))) {
                 // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
                 var dto = TbCustMasterDto.builder()
-                        .membId(Long.toString(kakaoUserInfo.getId()))
+                        .custId(Long.toString(kakaoUserInfo.getId()))
                         .provider(AuthProvider.KAKAO.name())
                         .birthday(kakaoUserInfo.getKakaoAccount().getBirthday())
                         .email(kakaoUserInfo.getKakaoAccount().getEmail())
-                        .membNm(StringUtils.hasText(kakaoUserInfo.getKakaoAccount().getName()) ? kakaoUserInfo.getKakaoAccount().getName() : kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
+                        .custNm(StringUtils.hasText(kakaoUserInfo.getKakaoAccount().getName()) ? kakaoUserInfo.getKakaoAccount().getName() : kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
                         .nickNm(kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
                         .hpNo(kakaoUserInfo.getKakaoAccount().getPhoneNumber())
                         .profilePath(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())

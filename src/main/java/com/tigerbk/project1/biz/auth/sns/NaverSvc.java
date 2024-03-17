@@ -25,6 +25,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 
+
+// https://developers.naver.com/apps/#/list
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -64,15 +66,15 @@ public class NaverSvc implements RequestSvc<NaverUserVo> {
             String accessToken = jwtUtil.getAccessToken(naverUserInfo.getResponse().getId());
             String refreshToken = jwtUtil.getRefreshToken(naverUserInfo.getResponse().getId());
 
-            if (!userRepository.existsByMembId(String.valueOf(naverUserInfo.getResponse().getId()))) {
+            if (!userRepository.existsByCustId(String.valueOf(naverUserInfo.getResponse().getId()))) {
                 // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
 
                 var dto = TbCustMasterDto.builder()
-                        .membId(naverUserInfo.getResponse().getId())
+                        .custId(naverUserInfo.getResponse().getId())
                         .provider(AuthProvider.NAVER.name())
                         .birthday(naverUserInfo.getResponse().getBirthyear())
                         .email(naverUserInfo.getResponse().getEmail())
-                        .membNm(naverUserInfo.getResponse().getName())
+                        .custNm(naverUserInfo.getResponse().getName())
                         .nickNm(naverUserInfo.getResponse().getNickname() == "" ? naverUserInfo.getResponse().getName()
                                 : naverUserInfo.getResponse().getNickname())
                         .hpNo(naverUserInfo.getResponse().getMobile())
@@ -116,15 +118,15 @@ public class NaverSvc implements RequestSvc<NaverUserVo> {
             String accessToken = jwtUtil.getAccessToken(naverUserInfo.getResponse().getId());
             String refreshToken = jwtUtil.getRefreshToken(naverUserInfo.getResponse().getId());
 
-            if (!userRepository.existsByMembId(String.valueOf(naverUserInfo.getResponse().getId()))) {
+            if (!userRepository.existsByCustId(String.valueOf(naverUserInfo.getResponse().getId()))) {
                 // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
 
                 var dto = TbCustMasterDto.builder()
-                        .membId(naverUserInfo.getResponse().getId())
+                        .custId(naverUserInfo.getResponse().getId())
                         .provider(AuthProvider.NAVER.name())
                         .birthday(naverUserInfo.getResponse().getBirthyear())
                         .email(naverUserInfo.getResponse().getEmail())
-                        .membNm(naverUserInfo.getResponse().getName())
+                        .custNm(naverUserInfo.getResponse().getName())
                         .nickNm(naverUserInfo.getResponse().getNickname() == "" ? naverUserInfo.getResponse().getName()
                                 : naverUserInfo.getResponse().getNickname())
                         .hpNo(naverUserInfo.getResponse().getMobile())

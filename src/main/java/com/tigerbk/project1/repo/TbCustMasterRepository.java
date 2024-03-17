@@ -7,12 +7,12 @@ import java.util.Optional;
 
 public interface TbCustMasterRepository extends JpaRepository<TbCustMaster, Long> {
 
-    Optional<TbCustMaster> findByMembId(String custId);
+    Optional<TbCustMaster> findByCustId(String custId);
 
-    Optional<TbCustMaster> findByMembIdAndPattenPasswd(String custId, String patternPasswd);
+    Optional<TbCustMaster> findByCustIdAndPattenPasswd(String custId, String patternPasswd);
 
-    Optional<TbCustMaster> findByMembIdAndPinPasswd(String custId, String pinPasswd);
+    Optional<TbCustMaster> findByCustIdAndPinPasswd(String custId, String pinPasswd);
 
-    boolean existsByMembId(String membId);
+    boolean existsByCustId(String custId);
 
 }

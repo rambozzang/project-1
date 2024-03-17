@@ -12,14 +12,15 @@ import java.io.IOException;
 
 @Configuration
 public class FirebaseConfig {
-
 	@PostConstruct
 	public void init() {
-		try {			
-			FirebaseOptions options = FirebaseOptions.builder().setCredentials(
-					GoogleCredentials.fromStream(new ClassPathResource("./serviceAccountKey.json").getInputStream()))
-					.build();
-			FirebaseApp.initializeApp(options);
+		try {
+			FirebaseApp.initializeApp(
+				FirebaseOptions.builder().setCredentials(
+					GoogleCredentials.fromStream(
+						new ClassPathResource("./serviceAccountKey.json").getInputStream()
+					)
+			).build());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

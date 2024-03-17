@@ -41,54 +41,54 @@ public class CustCntr {
 
     @Operation(
             summary = "02.로그인 by 패스워드",
-            description = "\n### membId 와 패스워드를 통한 로그인 서비스 "
+            description = "\n### custId 와 패스워드를 통한 로그인 서비스 "
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/auth/login")
-    public ResponseEntity<?> login(@Valid @RequestBody String membId, String passwd) {
+    public ResponseEntity<?> login(@Valid @RequestBody String custId, String passwd) {
         return ResData.SUCCESS(userAuthSvc.getSessionUser().toString());
     }
 
     @Operation(
             summary = "03. 로그인 by Pin번호",
-            description = "\n### membId 와 Pin번호를 통한 로그인 서비스 "
+            description = "\n### custId 와 Pin번호를 통한 로그인 서비스 "
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/auth/loginbyPin")
-    public ResponseEntity<?> loginbyPin(@Valid @RequestParam("membId") String membId, @RequestParam("pinNo") String pinNo) throws Exception {
-        return ResData.SUCCESS(custSvc.LoginByPinPasswd(membId, pinNo));
+    public ResponseEntity<?> loginbyPin(@Valid @RequestParam("custId") String custId, @RequestParam("pinNo") String pinNo) throws Exception {
+        return ResData.SUCCESS(custSvc.LoginByPinPasswd(custId, pinNo));
     }
 
     @Operation(
             summary = "03. 로그인 by 패턴번호",
-            description = "\n### membId 와 패턴번호를 통한 로그인 서비스 "
+            description = "\n### custId 와 패턴번호를 통한 로그인 서비스 "
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/auth/loginbyPattern")
-    public ResponseEntity<?> loginbyPattern(@Valid @RequestParam("membId") String membId, @RequestParam("pinNo") String pinNo) throws Exception {
-        return ResData.SUCCESS(custSvc.LoginByPattern(membId, pinNo));
+    public ResponseEntity<?> loginbyPattern(@Valid @RequestParam("custId") String custId, @RequestParam("pinNo") String pinNo) throws Exception {
+        return ResData.SUCCESS(custSvc.LoginByPattern(custId, pinNo));
     }
 
     @Operation(
             summary = "03. 로그인 by 생체인증",
-            description = "\n### membId 와 생체인증을 통한 로그인 서비스 "
+            description = "\n### custId 와 생체인증을 통한 로그인 서비스 "
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/auth/loginbyBio")
-    public ResponseEntity<?> loginbyBio(@Valid @RequestBody String membId, String bioInfo) throws Exception {
-        return ResData.SUCCESS(custSvc.LoginByBio(membId));
+    public ResponseEntity<?> loginbyBio(@Valid @RequestBody String custId, String bioInfo) throws Exception {
+        return ResData.SUCCESS(custSvc.LoginByBio(custId));
     }
 
 

@@ -17,9 +17,9 @@ public class UserAuthSvc {
     private final TbCustMasterRepository custRepo;
 
     @Transactional
-    public UserDetails getUserInfo(String membId) {
+    public UserDetails getUserInfo(String custId) {
         TbCustMasterDto tbUserMainDto = TbCustMasterMapper.INSTANCE.toDto(
-                custRepo.findByMembId(membId).orElseThrow(
+                custRepo.findByCustId(custId).orElseThrow(
                         () -> new NotFoundException("고객 정보가 존재하지 않습니다!")
                 ));
         return UserPrincipal.create(tbUserMainDto);
@@ -51,11 +51,11 @@ public class UserAuthSvc {
     }
 
     public static String getUserId() {
-        return getStaticSession().getMembId();
+        return getStaticSession().getCustId();
     }
 
     public static String getUserNm() {
-        return getStaticSession().getMembNm();
+        return getStaticSession().getCustNm();
     }
 
     public static String getSeq() {

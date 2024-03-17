@@ -83,7 +83,7 @@ public class JwtFilter extends OncePerRequestFilter {
             throw new BadRequestException("EXPIRED_ACCESS_TOKEN");
         }
 
-        String membId = (String) jwtUtil.get(token).get("membId");
+        String custId = (String) jwtUtil.get(token).get("custId");
 
         // 회원권한 - 강제 셋팅
         List<GrantedAuthority> roles = new ArrayList<>();
@@ -91,7 +91,7 @@ public class JwtFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authentication ;
 
         authentication = new UsernamePasswordAuthenticationToken(
-                userService.getUserInfo(membId), null,roles);
+                userService.getUserInfo(custId), null,roles);
         
         log.debug(" ==================================================================================");
         log.debug(" == Security Success  ");

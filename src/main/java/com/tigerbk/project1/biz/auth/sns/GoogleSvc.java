@@ -63,7 +63,7 @@ public class GoogleSvc implements RequestSvc<GoogleUserVo> {
         String refreshToken = jwtUtil.getRefreshToken(googleUserInfo.getId());
 
         // 회원가입이 된 경우
-        if (!userRepository.existsByMembId(googleUserInfo.getId())) {
+        if (!userRepository.existsByCustId(googleUserInfo.getId())) {
             return SignInResCvo.builder()
                     .authProvider(AuthProvider.GOOGLE)
                     .accessToken(accessToken)
@@ -73,11 +73,11 @@ public class GoogleSvc implements RequestSvc<GoogleUserVo> {
 
         // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
         var dto = TbCustMasterDto.builder()
-                .membId(googleUserInfo.getId())
+                .custId(googleUserInfo.getId())
                 .provider(AuthProvider.GOOGLE.name())
                 .birthday(null)
                 .email(googleUserInfo.getEmail())
-                .membNm(googleUserInfo.getName())
+                .custNm(googleUserInfo.getName())
                 .nickNm(googleUserInfo.getName())
                 .profilePath(googleUserInfo.getPicture())
                 .role(Role.USER.toString())
@@ -102,10 +102,10 @@ public class GoogleSvc implements RequestSvc<GoogleUserVo> {
             String refreshToken = jwtUtil.getRefreshToken(googleUserInfo.getId());
 
             // 회원가입이 된 경우
-            if (!userRepository.existsByMembId(String.valueOf(googleUserInfo.getId()))) {
+            if (!userRepository.existsByCustId(String.valueOf(googleUserInfo.getId()))) {
                 // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
 //				userRepository.save(TbCustMasterDto.builder()
-//					.membId(googleUserInfo.getId())
+//					.custId(googleUserInfo.getId())
 //					.provider(AuthProvider.GOOGLE.name())
 //					.birthday(null)
 //					.email(googleUserInfo.getEmail())
@@ -116,11 +116,11 @@ public class GoogleSvc implements RequestSvc<GoogleUserVo> {
 //					.build());
 
                 var dto = TbCustMasterDto.builder()
-                        .membId(googleUserInfo.getId())
+                        .custId(googleUserInfo.getId())
                         .provider(AuthProvider.GOOGLE.name())
                         .birthday(null)
                         .email(googleUserInfo.getEmail())
-                        .membNm(googleUserInfo.getName())
+                        .custNm(googleUserInfo.getName())
                         .nickNm(googleUserInfo.getName())
                         .profilePath(googleUserInfo.getPicture())
                         .role(Role.USER.toString())

@@ -17,11 +17,11 @@ public class TbCustMasterDto implements Serializable {
     Long id;
     @NotNull
     @Size(max = 100)
-    String membId;
+    String custId;
     @Size(max = 100)
     String nickNm;
     @Size(max = 100)
-    String membNm;
+    String custNm;
     @Size(max = 100)
     String email;
     @Size(max = 100)
