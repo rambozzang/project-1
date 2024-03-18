@@ -63,12 +63,11 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
     @Override
     public SignInResCvo redirectByToken(TokenReqSvo tokenRequest) {
+
         if (!StringUtils.hasText(tokenRequest.getAccessToken())) {
             throw new BadRequestException("CANNOT_FOUND_AccessToken");
         }
-        if (!StringUtils.hasText(tokenRequest.getRefreshToken())) {
-            throw new BadRequestException("CANNOT_FOUND_RefreshToken");
-        }
+
         try {
 
             KakaoUserVo kakaoUserInfo = getUserInfo(tokenRequest.getAccessToken());

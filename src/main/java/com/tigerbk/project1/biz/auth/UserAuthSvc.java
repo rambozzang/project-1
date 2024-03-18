@@ -18,8 +18,8 @@ public class UserAuthSvc {
 
     @Transactional
     public UserDetails getUserInfo(String custId) {
-        TbCustMasterDto tbUserMainDto = TbCustMasterMapper.INSTANCE.toDto(
-                custRepo.findByCustId(custId).orElseThrow(
+        TbCustMasterDto tbUserMainDto =
+                TbCustMasterMapper.INSTANCE.toDto(custRepo.findByCustId(custId).orElseThrow(
                         () -> new NotFoundException("고객 정보가 존재하지 않습니다!")
                 ));
         return UserPrincipal.create(tbUserMainDto);
