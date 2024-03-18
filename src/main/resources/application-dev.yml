@@ -61,7 +61,7 @@ file:
 
 logging:
   file:
-    name: /data/logs/project1/project1.log
+    name: /data/jar/project1/logs/project1.log
   level:
     com:
       tigerbk: DEBUG
