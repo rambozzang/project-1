@@ -102,6 +102,8 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
             uinfo.put("nickname", kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
             uinfo.put("picture", kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+
+            // firebase 로그인 처리
             String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
 
             // 로그인 시
