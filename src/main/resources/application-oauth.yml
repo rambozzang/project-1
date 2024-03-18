@@ -6,7 +6,6 @@ spring:
           google:
             client-id: 94642466533-p3tvrk3883ad3d8kftd9mrboipi89poo.apps.googleusercontent.com
             client-secret: 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
-            #redirect-uri: http://tigerbk1.cafe24.com:8080/login/oauth2/web/google
             redirect-uri: https://www.tigerbk.com/api/oauth2/mobile/google
             authorization-grant-type: authorization_code
             scope: profile, email, name
@@ -14,7 +13,6 @@ spring:
             authorization-grant-type: authorization_code
             client-id: 4efec10a9ec33d60ed0137af92b0abdc  
             client-secret: PN5Wwt5DVy2xBIuehQK5jnKNsRzWASme
-          #  redirect-uri: http://tigerbk1.cafe24.com:8080/login/oauth2/web/kakao
             redirect-uri: https://www.tigerbk.com/api/oauth2/mobile/kakao
             scope:
               - profile_nickname
@@ -24,7 +22,6 @@ spring:
           naver:
             client-id: AkO9to2gAVqyjGMInLAQ
             client-secret: z7ZchdO2Uq
-           # redirect-uri: http://tigerbk1.cafe24.com:8080/login/oauth2/web/naver
             redirect-uri: https://www.tigerbk.com/api/oauth2/mobile/naver
             authorization-grant-type: authorization_code
             scope: name, email
