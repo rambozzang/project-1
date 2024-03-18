@@ -63,12 +63,11 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
     @Override
     public SignInResCvo redirectByToken(TokenReqSvo tokenRequest) {
+
         if (!StringUtils.hasText(tokenRequest.getAccessToken())) {
             throw new BadRequestException("CANNOT_FOUND_AccessToken");
         }
-        if (!StringUtils.hasText(tokenRequest.getRefreshToken())) {
-            throw new BadRequestException("CANNOT_FOUND_RefreshToken");
-        }
+
         try {
 
             KakaoUserVo kakaoUserInfo = getUserInfo(tokenRequest.getAccessToken());
@@ -102,6 +101,8 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
             uinfo.put("nickname", kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
             uinfo.put("picture", kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+
+            // firebase 로그인 처리
             String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
 
             // 로그인 시

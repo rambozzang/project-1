@@ -58,29 +58,25 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.debug("#########    ----------- Auth SecurityFilterChain --------------  ######");
         log.debug("#########    ----------- Application Name : "+ appName + " --------------  ######");
-
-
-
         http.httpBasic().disable()
             .csrf().disable()
             .headers().frameOptions().disable()
-
             .and()
             .cors().configurationSource(request -> {
                 var cors = new CorsConfiguration();
                 cors.setAllowedOrigins(List.of(
-                      "https://localhost:3000",
-                        "http://localhost:3000",
-                        "https://authdev.kosapp.co.kr/",
-                        "https://auth.kosapp.co.kr/" ,
-                        "https://appwoori.kosapp.co.kr",
-                        "https://appwooridev.kosapp.co.kr",
-                        "https://admin.kosapp.co.kr",
-                        "https://admindev.kosapp.co.kr",
-                        "https://image.kosapp.co.kr",
-                        "https://imagedev.kosapp.co.kr",
-                        "https://api.kosapp.co.kr",
-                        "https://apidev.kosapp.co.kr"
+                      "https://localhost",
+                        "https://www.tigerbk.com",
+                        "https://project1.tigerbk.com",
+                        "https://project2.tigerbk.com",
+                        "https://project3.tigerbk.com",
+                        "https://project4.tigerbk.com",
+                        "https://project5.tigerbk.com",
+                        "https://project6.tigerbk.com",
+                        "https://project7.tigerbk.com",
+                        "https://project8.tigerbk.com",
+                        "https://project9.tigerbk.com",
+                        "https://project10.tigerbk.com"
                 ));
                 cors.setAllowedMethods(List.of("GET","POST"));
                 cors.setAllowedHeaders(List.of("*"));
