@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -91,7 +92,7 @@ public class AuthCntr {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "App에서 인증완료시 Token으로 로그인 처리 서비스", description = "Oaut2를 통해 Token 으로 로그인 처리")
     @PostMapping("/auth/joinByToken")
-    public ResponseEntity<?> joinByToken( @RequestBody TokenReqSvo tokenInSVO) {
+    public ResponseEntity<?> joinByToken(@Valid @RequestBody TokenReqSvo tokenInSVO) {
 
         return ResData.SUCCESS(authService.redirectByToken(tokenInSVO));
     }
@@ -100,7 +101,7 @@ public class AuthCntr {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "만료된 토큰 refreshToken으로 재생성 처리 서비스", description = "refreshToken을 입력받아 accessToken, refreshToken 를 반환")
     @PostMapping("/auth/refreshtoken")
-    public ResponseEntity<?> refreshToken(@RequestBody TokenReqSvo tokenRequest) {
+    public ResponseEntity<?> refreshToken(@Valid  @RequestBody TokenReqSvo tokenRequest) {
         return ResData.SUCCESS(authService.refreshToken(tokenRequest));
     }
 
