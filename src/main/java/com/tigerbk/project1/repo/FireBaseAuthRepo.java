@@ -55,68 +55,70 @@ public class FireBaseAuthRepo {
             userRecord = FirebaseAuth.getInstance().getUser(uid);            
             isMember = true;
         } catch (FirebaseAuthException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             isMember = false;
         } catch (Exception e){
-            e.printStackTrace();
+           // e.printStackTrace();
             isMember = false;
         }
 
         log.debug("isMember : " + isMember );
 
         if (isMember) {
-            UpdateRequest request = new UpdateRequest(uid);
-            request.setEmail(email);
-            request.setDisplayName(displayName);
-            request.setDisabled(false);
-            // .setEmailVerified(false)
-            // .setPassword("secretPassword")
-            //  request.setPhoneNumber(phoneNumber);
-            // request.setPhotoUrl(picture);
             try {
+                UpdateRequest request = new UpdateRequest(uid)
+                    .setEmail("user@example.com")
+                    .setPhoneNumber("+11234567890")
+                    .setEmailVerified(false)
+                    .setPassword("newPassword")
+                    .setDisplayName(displayName)
+                    .setPhotoUrl("http://www.example.com/12345678/photo.png")
+                    .setDisabled(false);
                 userRecord = FirebaseAuth.getInstance().updateUser(request);
+                log.debug("Successfully updated user: " + userRecord.getUid());
             } catch (FirebaseAuthException e) {
-                e.printStackTrace();
+              //  e.printStackTrace();
                 log.debug("updateUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase updateUser 생성오류 :" + e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
+             //   e.printStackTrace();
                 log.debug("updateUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase updateUser 생성오류 :" + e.getMessage());
             }
         } else {
-            CreateRequest request = new CreateRequest();
-            request.setUid(uid);
-            request.setEmail(email);
-            request.setDisplayName(displayName);
-            request.setDisabled(false);
-            // .setEmailVerified(false)
-            // .setPassword("secretPassword")
-            // request.setPhoneNumber(phoneNumber);
-            //  request.setPhotoUrl(picture);
-            // .setPhotoUrl("http://www.example.com/12345678/photo.png")
             try {
+                 CreateRequest request = new CreateRequest()
+                    .setUid(uid)
+                    .setEmail("user@example.com")
+                    .setEmailVerified(false)
+                    .setPassword("secretPassword")
+                    .setPhoneNumber("+11234567890")
+                    .setDisplayName(displayName)
+                    .setPhotoUrl("http://www.example.com/12345678/photo.png")
+                    .setDisabled(false);
                 userRecord = FirebaseAuth.getInstance().createUser(request);
+                log.debug("Successfully created new user: " + userRecord.getUid());
+
             } catch (FirebaseAuthException e) {
-                e.printStackTrace();
+              //  e.printStackTrace();
                 log.debug("createUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase createUser 생성오류 :" + e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
+             //   e.printStackTrace();
                 log.debug("createUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase createUser 생성오류 :" + e.getMessage());
             }
         }
 
         try { // 2. 전달받은 user 정보로 CustomToken을 발행한다.
-            System.out.println("@@@ createCustomToken Start... : " + userRecord.getUid());
+            System.out.println("@@@ createCustomToken Start : " + userRecord.getUid());
             return FirebaseAuth.getInstance().createCustomToken(userRecord.getUid());
         } catch (FirebaseAuthException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             log.debug("createCustomToken : " + e.getMessage() );
             throw new BadRequestException("Firebase Token 생성오류 :" + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
             log.debug("createCustomToken : " + e.getMessage() );
             throw new BadRequestException("Firebase Token 생성오류 :" + e.getMessage());
         }

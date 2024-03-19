@@ -197,7 +197,7 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserVo.class)
-                //  .log()
+                .log()
                 .block();
     }
 
