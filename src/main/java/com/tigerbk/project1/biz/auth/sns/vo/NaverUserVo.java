@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+//@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class NaverUserVo {
     private String resultcode;
     private String message;
