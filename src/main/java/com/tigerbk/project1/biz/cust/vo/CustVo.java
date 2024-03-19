@@ -1,10 +1,9 @@
-package com.tigerbk.project1.biz.cust;
+package com.tigerbk.project1.biz.cust.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
-public class CustVO {
+public class CustVo {
 
     @Getter
     @Setter

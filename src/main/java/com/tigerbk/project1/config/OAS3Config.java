@@ -24,7 +24,7 @@ public class OAS3Config {
     Info info = new Info()
         .version("v1.0.0")
         .title("Kos Project1 Project")
-        .description("이름: 홍길동  / 토큰 : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJtZW1iSWQiOiJ0aWdlcmJrIiwiaXNBZG1pbiI6Ik4iLCJhdXRoTWV0aG9kIjoiTiIsImV4cCI6MTcyNTYxOTcxOX0.-pQqbA2dbuKz8YajXiJumltqmTFIMIYboj3juO2Ic6obe1Pphnmr4APHUzYTZOsThyYnPknXVabkUrRPFl8X3w");
+        .description("이름: 홍길동  / 토큰 : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJjdXN0SWQiOiJ0aWdlcmJrIiwiaXNBZG1pbiI6Ik4iLCJhdXRoTWV0aG9kIjoiTiIsImV4cCI6MTcyNjM1NzgxNH0.PcNWCrdjQiJq4nDAB7zWtKVvEyeYx5Cos1FPLDbpYPxnHhmWF9ZSUkbmQ7PR5-MeOsFs1g9G3EtF9CBDqUZ8sQ");
 
     Server server = new Server().url(servletContext.getContextPath());
     log.debug("########################################################################");

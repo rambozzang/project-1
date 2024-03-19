@@ -8,6 +8,9 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 
 @SuperBuilder
 public class BoardSvo {
@@ -19,11 +22,23 @@ public class BoardSvo {
     public static class BoardInVo {
 
         /**
+         * 페이지 Num
+         */
+        @Schema(description = "현재페이지", example = "1")
+        private int pageNum;
+
+        /**
+         * 페이지 Size
+         */
+        @Schema(description = "페이지에 보여지는 데이터수", example = "1")
+        private int pageSize;
+
+        /**
          * 게시물번호
          */
         @Schema(description = "게시물번호", example = "1")
         @NotNull(message = "게시물번호가 존재하지 않습니다. 다시 확인해 주세요.")
-        private String loanNo;
+        private BigInteger boardId;
 
         /**
          * 게시판 구분코드
@@ -78,7 +93,7 @@ public class BoardSvo {
          */
         @Schema(description = "부모 게시글ID", example = "12121312")
         @PositiveOrZero(message = "부모 게시글ID는 0보다 작을수 없습니다.")
-        private String parentId;
+        private BigInteger parentId;
 
         /**
          * 게시글 순서
@@ -108,7 +123,7 @@ public class BoardSvo {
          */
         @Schema(description = "게시물번호", example = "1")
         @NotNull(message = "게시물번호가 존재하지 않습니다. 다시 확인해 주세요.")
-        private String loanNo;
+        private BigDecimal boardId;
 
         /**
          * 게시판 구분코드
@@ -163,7 +178,7 @@ public class BoardSvo {
          */
         @Schema(description = "부모 게시글ID", example = "1212312")
         @PositiveOrZero(message = "부모 게시글ID는 0보다 작을수 없습니다.")
-        private String parentId;
+        private BigInteger parentId;
 
         /**
          * 게시글 순서

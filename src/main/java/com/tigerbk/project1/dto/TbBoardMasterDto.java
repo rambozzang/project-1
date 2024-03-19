@@ -11,7 +11,7 @@ import java.time.Instant;
  */
 @Value
 public class TbBoardMasterDto implements Serializable {
-    Long id;
+    Long boardId;
     @Size(max = 4)
     String typeCd;
     @Size(max = 4)
@@ -23,9 +23,7 @@ public class TbBoardMasterDto implements Serializable {
     @Size(max = 200)
     String subject;
     String contents;
-    @Size(max = 1)
     Integer depthNo;
-    Long parentId;
     Integer sortNo;
     @Size(max = 1)
     String delYn;

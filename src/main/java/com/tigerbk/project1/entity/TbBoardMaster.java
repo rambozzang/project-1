@@ -2,20 +2,24 @@ package com.tigerbk.project1.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import jdk.jfr.Category;
+import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "TB_BOARD_MASTER", schema = "db_1")
 public class TbBoardMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID", nullable = false)
-    private Long id;
+    private Long boardId;
 
     @Size(max = 4)
     @Column(name = "TYPE_CD", length = 4)
@@ -44,8 +48,9 @@ public class TbBoardMaster {
     @Column(name = "DEPTH_NO")
     private Integer depthNo;
 
-    @Column(name = "PARENT_ID")
-    private Long parentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    private TbBoardMaster parentId;
 
     @Column(name = "SORT_NO")
     private Integer sortNo;
@@ -68,4 +73,7 @@ public class TbBoardMaster {
     @Column(name = "CHG_CUST_ID", length = 100)
     private String chgCustId;
 
+    @OneToMany(mappedBy = "parentId", fetch = FetchType.LAZY,
+    cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<TbBoardMaster> child = new ArrayList<>();
 }
