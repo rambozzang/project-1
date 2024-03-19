@@ -73,7 +73,15 @@ public class FireBaseAuthRepo {
             // .setPassword("secretPassword")
             //  request.setPhoneNumber(phoneNumber);
             // request.setPhotoUrl(picture);
-            userRecord = FirebaseAuth.getInstance().updateUser(request);
+            try {
+                userRecord = FirebaseAuth.getInstance().updateUser(request);
+            } catch (FirebaseAuthException e) {
+                e.printStackTrace();
+                throw new BadRequestException("Firebase updateUser 생성오류 :" + e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new BadRequestException("Firebase updateUser 생성오류 :" + e.getMessage());
+            }
         } else {
             CreateRequest request = new CreateRequest();
             request.setUid(uid);
@@ -85,7 +93,15 @@ public class FireBaseAuthRepo {
             // request.setPhoneNumber(phoneNumber);
             //  request.setPhotoUrl(picture);
             // .setPhotoUrl("http://www.example.com/12345678/photo.png")
-            userRecord = FirebaseAuth.getInstance().createUser(request);
+            try {
+                userRecord = FirebaseAuth.getInstance().createUser(request);
+            } catch (FirebaseAuthException e) {
+                e.printStackTrace();
+                throw new BadRequestException("Firebase createUser 생성오류 :" + e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new BadRequestException("Firebase createUser 생성오류 :" + e.getMessage());
+            }
         }
 
         try { // 2. 전달받은 user 정보로 CustomToken을 발행한다.

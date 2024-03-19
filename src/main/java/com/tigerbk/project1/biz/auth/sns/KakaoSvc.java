@@ -15,6 +15,7 @@ import com.tigerbk.project1.mapper.TbCustMasterMapper;
 import com.tigerbk.project1.repo.FireBaseAuthRepo;
 import com.tigerbk.project1.repo.TbCustMasterRepository;
 import com.tigerbk.project1.security.JwtUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,6 +63,7 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
 
     @Override
+    @Transactional
     public SignInResCvo redirectByToken(TokenReqSvo tokenRequest) {
 
         if (!StringUtils.hasText(tokenRequest.getAccessToken())) {
