@@ -67,7 +67,7 @@ public class SecurityConfig {
                     var corsConfig = new CorsConfiguration();
                     corsConfig.setAllowedOrigins(List.of(
                             "https://localhost",
-                            "https://www.tigerbk.com",
+                            "http://www.tigerbk.com",
                             "https://project1.tigerbk.com",
                             "https://project2.tigerbk.com",
                             "https://project3.tigerbk.com",

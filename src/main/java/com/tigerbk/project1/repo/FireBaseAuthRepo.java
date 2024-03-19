@@ -36,6 +36,7 @@ public class FireBaseAuthRepo {
     
 
     // 기본 적으로 유효기간은 1시간 이며 유저 정보를 이용해서 생성할 수 있는 방법이 어려개 있음. ( 공식문서 참고 )
+    // https://firebase.google.com/docs/auth/admin/manage-users?hl=ko#java_4
     public String createFirebaseCustomToken(Map<String, Object> userInfo) {
 
         UserRecord userRecord;
