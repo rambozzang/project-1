@@ -112,6 +112,13 @@ public class AuthCntr {
         return ResData.SUCCESS(authService.getFirebaseCutomTokenByuid(uid));
     }
 
+    // firebase clound 저장된 uid 로 customtoken 생성하여 리턴
+    @GetMapping("/error")
+    public ResponseEntity<?> error() throws FirebaseAuthException {
+        return ResData.SUCCESS("error");
+    }
+
+
 
 
 }

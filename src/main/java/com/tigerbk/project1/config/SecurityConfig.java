@@ -47,7 +47,7 @@ public class SecurityConfig {
             "/oauth2/**",              "/auth/**",
             "/css/**",                "/img/**",
             "/static/**",             "/resources/**",
-            "/comm/code/**",          "/asis/**",
+            "/comm/code/**",          "/error",
             "/cus/**",                "/cntr/**",
             "/view/**"
     };
