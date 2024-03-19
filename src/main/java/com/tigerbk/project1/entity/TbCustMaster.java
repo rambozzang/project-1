@@ -67,12 +67,5 @@ public class TbCustMaster {
     @Column(name = "PIN_PASSWD", length = 6)
     private String pinPasswd;
 
-    @NotNull
-    @Column(name = "REG_DATE", nullable = false)
-    private Instant regDate;
-
-    @NotNull
-    @Column(name = "MOD_DATE", nullable = false)
-    private Instant modDate;
 
 }

@@ -12,11 +12,4 @@ public class TokenReqSvo {
     private String state;
     private String accessToken;
     private String refreshToken;
-
-    @Builder
-    public TokenReqSvo(String registrationId, String code, String state){
-        this.registrationId = registrationId;
-        this.code = code;
-        this.state = state;
-    }
 }

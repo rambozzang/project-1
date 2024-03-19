@@ -2,16 +2,19 @@ package com.tigerbk.project1.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * DTO for {@link com.tigerbk.project1.entity.TbCustMaster}
  */
-@Value
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class TbCustMasterDto implements Serializable {
     Long id;
@@ -40,8 +43,8 @@ public class TbCustMasterDto implements Serializable {
     String pattenPasswd;
     @Size(max = 6)
     String pinPasswd;
-    @NotNull
-    Instant regDate;
-    @NotNull
-    Instant modDate;
+
+    LocalDateTime regDate;
+
+    LocalDateTime modDate;
 }
