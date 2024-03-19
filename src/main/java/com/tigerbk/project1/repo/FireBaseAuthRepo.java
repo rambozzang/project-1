@@ -6,6 +6,7 @@ import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.google.firebase.auth.UserRecord.UpdateRequest;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.tigerbk.project1.exception.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +45,20 @@ public class FireBaseAuthRepo {
         String uid = String.valueOf(userInfo.get("id"));
         String email = String.valueOf(userInfo.get("email"));
         String displayName = String.valueOf( userInfo.get("nickname"));
-      //  String phoneNumber = String.valueOf(userInfo.get("phoneNumber"));
+        String phoneNumber = String.valueOf(userInfo.get("phoneNumber"));
         String picture = String.valueOf(userInfo.get("picture"));
+        if(email == null || email.equals("null") || email.equals("")){
+            email = uid + "@tigerbk.com";
+        }
+        if(displayName == null || displayName.equals("null") || displayName.equals("")){
+            displayName = "TigerBK";
+        }
+        if(picture == null || picture.equals("null") || picture.equals("")){
+            picture = "https://tigerbk.com/images/default.png";
+        }
+        if(phoneNumber == null || phoneNumber.equals("null") || phoneNumber.equals("")){
+            phoneNumber = "010-0000-0000";
+        }
 
         log.debug(uid);
         log.debug(email);
@@ -68,12 +81,12 @@ public class FireBaseAuthRepo {
         if (isMember) {
             try {
                 UpdateRequest request = new UpdateRequest(uid)
-                    .setEmail("user@example.com")
-                    .setPhoneNumber("+11234567890")
+                    .setEmail(email)
+                    .setPhoneNumber("+82"+phoneNumber)
                     .setEmailVerified(false)
                     .setPassword("newPassword")
                     .setDisplayName(displayName)
-                    .setPhotoUrl("http://www.example.com/12345678/photo.png")
+                    .setPhotoUrl(picture)
                     .setDisabled(false);
                 userRecord = FirebaseAuth.getInstance().updateUser(request);
                 log.debug("Successfully updated user: " + userRecord.getUid());
@@ -90,12 +103,12 @@ public class FireBaseAuthRepo {
             try {
                  CreateRequest request = new CreateRequest()
                     .setUid(uid)
-                    .setEmail("user@example.com")
+                    .setEmail(email)
                     .setEmailVerified(false)
                     .setPassword("secretPassword")
-                    .setPhoneNumber("+11234567890")
+                    .setPhoneNumber("+82"+phoneNumber)
                     .setDisplayName(displayName)
-                    .setPhotoUrl("http://www.example.com/12345678/photo.png")
+                    .setPhotoUrl(picture)
                     .setDisabled(false);
                 userRecord = FirebaseAuth.getInstance().createUser(request);
                 log.debug("Successfully created new user: " + userRecord.getUid());
@@ -113,6 +126,7 @@ public class FireBaseAuthRepo {
 
         try { // 2. 전달받은 user 정보로 CustomToken을 발행한다.
             System.out.println("@@@ createCustomToken Start : " + userRecord.getUid());
+
             return FirebaseAuth.getInstance().createCustomToken(userRecord.getUid());
         } catch (FirebaseAuthException e) {
           //  e.printStackTrace();

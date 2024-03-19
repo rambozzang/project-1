@@ -9,10 +9,15 @@ import lombok.ToString;
 @ToString
 //@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class NaverUserVo {
-    private String resultcode;
-    private String message;
-    private NaverAccount response;
+    private String stauts;
+    private NaverAccount account;
 
+
+
+//    private String resultcode;
+//    private String message;
+
+//
     @Getter
     public static class NaverAccount {
         private String id;
@@ -25,5 +30,8 @@ public class NaverUserVo {
         private String profileImage;
         private String birthyear;
         private String mobile;
+
+
+
     }
 }

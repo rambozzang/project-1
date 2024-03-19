@@ -69,6 +69,8 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
             uinfo.put("nickname", kakaoUserVo.getKakaoAccount().getProfile().getNickname());
             uinfo.put("picture", kakaoUserVo.getKakaoAccount().getProfile().getProfileImageUrl());
             String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
+            log.debug("customToken : " + customToken);
+            log.debug("customToken len : " + customToken.length());
 
             if (!userRepository.existsByCustId(String.valueOf(kakaoUserVo.getId()))) {
                 var dto = TbCustMasterDto.builder()
@@ -78,7 +80,7 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
                         .email(kakaoUserVo.getKakaoAccount().getEmail())
                         .custNm(StringUtils.hasText(kakaoUserVo.getKakaoAccount().getName()) ? kakaoUserVo.getKakaoAccount().getName() : kakaoUserVo.getKakaoAccount().getProfile().getNickname())
                         .nickNm(kakaoUserVo.getKakaoAccount().getProfile().getNickname())
-                        .fcmId(customToken)
+                 //      .fcmId(customToken)
                         .hpNo(kakaoUserVo.getKakaoAccount().getPhoneNumber())
                         .profilePath(kakaoUserVo.getKakaoAccount().getProfile().getProfileImageUrl())
                         .role(Role.USER.toString())

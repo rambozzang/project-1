@@ -10,6 +10,7 @@ import com.tigerbk.project1.mapper.TbCustMasterMapper;
 import com.tigerbk.project1.repo.FireBaseAuthRepo;
 import com.tigerbk.project1.repo.TbCustMasterRepository;
 import com.tigerbk.project1.security.JwtUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,16 +52,46 @@ public class GoogleSvc implements RequestSvc<GoogleUserVo> {
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String REDIRECT_URI;
 
+    @Transactional
+    public String SignInProc(GoogleUserVo googleUserVo) {
+
+//        TokenResSvo tokenResponse = getAccessToken(authRegVo);
+   //     GoogleUserVo googleUserInfo = getUserInfo(tokenResponse.getAccessToken());
+        String accessToken = jwtUtil.getAccessToken(googleUserVo.getUid());
+        String refreshToken = jwtUtil.getRefreshToken(googleUserVo.getUid());
+        // 회원가입이 된 경우
+        if (!userRepository.existsByCustId(googleUserVo.getUid())) {
+            return accessToken;
+        }
+
+        // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
+        var dto = TbCustMasterDto.builder()
+                .custId(googleUserVo.getUid())
+                .provider(AuthProvider.GOOGLE.name())
+                .birthday(null)
+                .email(googleUserVo.getEmail())
+                .custNm(googleUserVo.getDisplayName())
+                .nickNm(googleUserVo.getDisplayName())
+                .profilePath(googleUserVo.getPhotoURL())
+                .role(Role.USER.toString())
+                .build();
+
+        userRepository.save(TbCustMasterMapper.INSTANCE.toEntity(dto));
+
+        return accessToken;
+
+    }
+
     @Override
     public SignInResCvo redirectByToken(AuthRegVo authRegVo) {
 
         TokenResSvo tokenResponse = getAccessToken(authRegVo);
         GoogleUserVo googleUserInfo = getUserInfo(tokenResponse.getAccessToken());
-        String accessToken = jwtUtil.getAccessToken(googleUserInfo.getId());
-        String refreshToken = jwtUtil.getRefreshToken(googleUserInfo.getId());
+        String accessToken = jwtUtil.getAccessToken(googleUserInfo.getUid());
+        String refreshToken = jwtUtil.getRefreshToken(googleUserInfo.getUid());
 
         // 회원가입이 된 경우
-        if (!userRepository.existsByCustId(googleUserInfo.getId())) {
+        if (!userRepository.existsByCustId(googleUserInfo.getUid())) {
             return SignInResCvo.builder()
                     .authProvider(AuthProvider.GOOGLE)
                     .accessToken(accessToken)
@@ -70,13 +101,13 @@ public class GoogleSvc implements RequestSvc<GoogleUserVo> {
 
         // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
         var dto = TbCustMasterDto.builder()
-                .custId(googleUserInfo.getId())
+                .custId(googleUserInfo.getUid())
                 .provider(AuthProvider.GOOGLE.name())
                 .birthday(null)
                 .email(googleUserInfo.getEmail())
-                .custNm(googleUserInfo.getName())
-                .nickNm(googleUserInfo.getName())
-                .profilePath(googleUserInfo.getPicture())
+                .custNm(googleUserInfo.getDisplayName())
+                .nickNm(googleUserInfo.getDisplayName())
+                .profilePath(googleUserInfo.getPhotoURL())
                 .role(Role.USER.toString())
                 .build();
 

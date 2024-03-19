@@ -9,8 +9,9 @@ import lombok.ToString;
 @ToString
 //@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class GoogleUserVo {
-    private String id;
+    private String uid;
     private String email;
-    private String name;
-    private String picture;
+    private String displayName;
+    private String phoneNumber;
+    private String photoURL;
 }
