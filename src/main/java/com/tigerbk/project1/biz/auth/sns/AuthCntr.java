@@ -3,6 +3,7 @@ package com.tigerbk.project1.biz.auth.sns;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import com.tigerbk.project1.biz.auth.sns.vo.AuthRegVo;
+import com.tigerbk.project1.biz.auth.sns.vo.KakaoUserVo;
 import com.tigerbk.project1.biz.auth.sns.vo.TokenReqSvo;
 import com.tigerbk.project1.common.vo.ResData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthCntr {
 
     private final AuthSvc authService;
+    private final KakaoSvc kakaoSvc;
 
     /*
      * 각 제공사 인증화면에서 인증 완료후 호출되는 페이지
@@ -80,6 +82,14 @@ public class AuthCntr {
 //        }
 //    }
 
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
+    @Operation(summary = "KAKAO App에서 얻은 정보로 로그인 처리 서비스", description = "KAKAO User 정보로 회원가입한다.")
+    @PostMapping("/auth/kakaojoin")
+    public ResponseEntity<?> joinBykakao(@Valid @RequestBody KakaoUserVo kakaoUserVo) {
+        return ResData.SUCCESS(kakaoSvc.SignInProc(kakaoUserVo));
+    }
+
+
     /*
      * Client App 에서 이미 이증후 accessToken 까지 받은 상태로
      * Token 를 받아 회원가입,파이어베이스가입 처리후 리
@@ -113,4 +123,6 @@ public class AuthCntr {
     public ResponseEntity<?> error() throws FirebaseAuthException {
         return ResData.SUCCESS("Error Page !!");
     }
+
+
 }

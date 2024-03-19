@@ -58,6 +58,43 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
     private String USER_INFO_URI;
 
+    @Transactional
+    public String SignInProc(KakaoUserVo kakaoUserVo) {
+
+        try {
+            // firebase 로그인 처리
+            HashMap<String, Object> uinfo = new HashMap<>();
+            uinfo.put("id", kakaoUserVo.getId());
+            uinfo.put("email", kakaoUserVo.getKakaoAccount().getEmail());
+            uinfo.put("nickname", kakaoUserVo.getKakaoAccount().getProfile().getNickname());
+            uinfo.put("picture", kakaoUserVo.getKakaoAccount().getProfile().getProfileImageUrl());
+            String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
+
+            if (!userRepository.existsByCustId(String.valueOf(kakaoUserVo.getId()))) {
+                var dto = TbCustMasterDto.builder()
+                        .custId(Long.toString(kakaoUserVo.getId()))
+                        .provider(AuthProvider.KAKAO.name())
+                        .birthday(kakaoUserVo.getKakaoAccount().getBirthday())
+                        .email(kakaoUserVo.getKakaoAccount().getEmail())
+                        .custNm(StringUtils.hasText(kakaoUserVo.getKakaoAccount().getName()) ? kakaoUserVo.getKakaoAccount().getName() : kakaoUserVo.getKakaoAccount().getProfile().getNickname())
+                        .nickNm(kakaoUserVo.getKakaoAccount().getProfile().getNickname())
+                        .fcmId(customToken)
+                        .hpNo(kakaoUserVo.getKakaoAccount().getPhoneNumber())
+                        .profilePath(kakaoUserVo.getKakaoAccount().getProfile().getProfileImageUrl())
+                        .role(Role.USER.toString())
+                        .build();
+                userRepository.save(TbCustMasterMapper.INSTANCE.toEntity(dto));
+            }
+            String accessToken = jwtUtil.getAccessToken(String.valueOf(kakaoUserVo.getId()));
+            String refreshToken = jwtUtil.getRefreshToken(String.valueOf(kakaoUserVo.getId()));
+            return accessToken;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DefaultException("SignInProc 처리중오류발생 : " + e.getMessage());
+        }
+    }
+
 
     @Override
     @Transactional
