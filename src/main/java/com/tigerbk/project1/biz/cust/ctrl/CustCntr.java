@@ -1,10 +1,11 @@
-package com.tigerbk.project1.biz.cust;
+package com.tigerbk.project1.biz.cust.ctrl;
 
 
 import com.tigerbk.project1.biz.auth.UserAuthSvc;
+import com.tigerbk.project1.biz.cust.svc.CustSvc;
 import com.tigerbk.project1.common.vo.ResData;
 import com.tigerbk.project1.exception.ErrorResponse;
-import com.tigerbk.project1.repo.TbCustMasterRepository;
+import com.tigerbk.project1.security.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +26,10 @@ public class CustCntr {
 
 
     private final UserAuthSvc userAuthSvc;
+
     private final CustSvc custSvc;
+
+    private final JwtUtil jwtUtil;
 
 
     @Operation(summary = "01.토큰을 통한 사용자정보조회", description = "\n### 토큰을 통한 사용자 정보를 조회한다." +
@@ -66,7 +70,7 @@ public class CustCntr {
     }
 
     @Operation(
-            summary = "03. 로그인 by 패턴번호",
+            summary = "04. 로그인 by 패턴번호",
             description = "\n### custId 와 패턴번호를 통한 로그인 서비스 "
     )
     @ApiResponses(value = {
@@ -79,7 +83,7 @@ public class CustCntr {
     }
 
     @Operation(
-            summary = "03. 로그인 by 생체인증",
+            summary = "05. 로그인 by 생체인증",
             description = "\n### custId 와 생체인증을 통한 로그인 서비스 "
     )
     @ApiResponses(value = {
@@ -91,5 +95,17 @@ public class CustCntr {
         return ResData.SUCCESS(custSvc.LoginByBio(custId));
     }
 
-
+    @Operation(summary = "06. Token 발급(Test AccessToken 발급)", description = " Token 발급 서비스")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Token 발급 성공", content = @Content(schema = @Schema(implementation = String.class))),
+    })
+    @GetMapping("/auth/gettoken/{custId}")
+    public ResponseEntity<?> getToken(@PathVariable(name = "custId") String custId) {
+        String token = jwtUtil.getAccessToken(custId);
+        if(token != null && !"".equals(token)) {
+            return ResData.SUCCESS(token, "Token 가져오기 성공");
+        }else{
+            return ResData.FAIL("Token 가져오기 실패");
+        }
+    }
 }
