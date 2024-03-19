@@ -58,44 +58,46 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.debug("#########    ----------- Auth SecurityFilterChain --------------  ######");
         log.debug("#########    ----------- Application Name : "+ appName + " --------------  ######");
-        http.httpBasic().disable()
-            .csrf().disable()
-            .headers().frameOptions().disable()
-            .and()
-            .cors().configurationSource(request -> {
-                var cors = new CorsConfiguration();
-                cors.setAllowedOrigins(List.of(
-                      "https://localhost",
-                        "https://www.tigerbk.com",
-                        "https://project1.tigerbk.com",
-                        "https://project2.tigerbk.com",
-                        "https://project3.tigerbk.com",
-                        "https://project4.tigerbk.com",
-                        "https://project5.tigerbk.com",
-                        "https://project6.tigerbk.com",
-                        "https://project7.tigerbk.com",
-                        "https://project8.tigerbk.com",
-                        "https://project9.tigerbk.com",
-                        "https://project10.tigerbk.com"
-                ));
-                cors.setAllowedMethods(List.of("GET","POST"));
-                cors.setAllowedHeaders(List.of("*"));
-                return cors;
-            })
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.httpBasic(httpBasic -> httpBasic.disable())
+                .csrf((csrf) -> csrf.disable())
+                .headers(headers -> headers.frameOptions(
+                        frameOptions -> frameOptions.disable()
+                ))
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new CorsConfiguration();
+                    corsConfig.setAllowedOrigins(List.of(
+                            "https://localhost",
+                            "https://www.tigerbk.com",
+                            "https://project1.tigerbk.com",
+                            "https://project2.tigerbk.com",
+                            "https://project3.tigerbk.com",
+                            "https://project4.tigerbk.com",
+                            "https://project5.tigerbk.com",
+                            "https://project6.tigerbk.com",
+                            "https://project7.tigerbk.com",
+                            "https://project8.tigerbk.com",
+                            "https://project9.tigerbk.com",
+                            "https://project10.tigerbk.com"
+                    ));
+                    corsConfig.applyPermitDefaultValues();
+                    corsConfig.setAllowedMethods(List.of("GET","POST"));
+                    corsConfig.setAllowedHeaders(List.of("*"));
+                    return corsConfig;
+                }))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests((authorizeHttpRequests) ->
+                        authorizeHttpRequests
+                                .requestMatchers(UI).permitAll()
+                                .requestMatchers(SWAGGER).permitAll()
+                                .requestMatchers("/**").authenticated()
 
-            .and()
-            .authorizeHttpRequests()
-            .requestMatchers(UI).permitAll()
-            .requestMatchers(SWAGGER).permitAll()
-            .requestMatchers("/**").authenticated()
+                )
+                .exceptionHandling(
+                    exceptionHandling -> exceptionHandling
+                                .accessDeniedHandler(customAccessDeniedHandler)
+                                .authenticationEntryPoint(authEntryPoint)
+                );
 
-            .and()
-                .exceptionHandling()
-                .accessDeniedHandler(customAccessDeniedHandler)
-                .authenticationEntryPoint(authEntryPoint);
 
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
