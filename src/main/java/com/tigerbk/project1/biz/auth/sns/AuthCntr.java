@@ -91,7 +91,7 @@ public class AuthCntr {
      */
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "App에서 인증완료시 Token으로 로그인 처리 서비스", description = "Oaut2를 통해 Token 으로 로그인 처리")
-    @PostMapping("/auth/joinByToken")
+    @PostMapping("/auth/joinbytoken")
     public ResponseEntity<?> joinByToken(@Valid @RequestBody TokenReqSvo tokenInSVO) {
 
         return ResData.SUCCESS(authService.redirectByToken(tokenInSVO));
@@ -106,7 +106,7 @@ public class AuthCntr {
     }
 
     // firebase clound 저장된 uid 로 customtoken 생성하여 리턴
-    @GetMapping("/auth/getFirebaseCustomToken")
+    @GetMapping("/auth/getfirebasecustomtoken")
     public ResponseEntity<?> getFirebaseCutomTokenByuid(
             @RequestParam("uid") String uid) throws FirebaseAuthException {
         return ResData.SUCCESS(authService.getFirebaseCutomTokenByuid(uid));

@@ -77,9 +77,11 @@ public class FireBaseAuthRepo {
                 userRecord = FirebaseAuth.getInstance().updateUser(request);
             } catch (FirebaseAuthException e) {
                 e.printStackTrace();
+                log.debug("updateUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase updateUser 생성오류 :" + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
+                log.debug("updateUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase updateUser 생성오류 :" + e.getMessage());
             }
         } else {
@@ -97,9 +99,11 @@ public class FireBaseAuthRepo {
                 userRecord = FirebaseAuth.getInstance().createUser(request);
             } catch (FirebaseAuthException e) {
                 e.printStackTrace();
+                log.debug("createUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase createUser 생성오류 :" + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
+                log.debug("createUser : " + e.getMessage() );
                 throw new BadRequestException("Firebase createUser 생성오류 :" + e.getMessage());
             }
         }
@@ -109,9 +113,11 @@ public class FireBaseAuthRepo {
             return FirebaseAuth.getInstance().createCustomToken(userRecord.getUid());
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
+            log.debug("createCustomToken : " + e.getMessage() );
             throw new BadRequestException("Firebase Token 생성오류 :" + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
+            log.debug("createCustomToken : " + e.getMessage() );
             throw new BadRequestException("Firebase Token 생성오류 :" + e.getMessage());
         }
 
