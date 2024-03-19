@@ -1,10 +1,7 @@
 package com.tigerbk.project1.biz.auth.sns;
 
 
-import com.tigerbk.project1.biz.auth.sns.vo.KakaoUserVo;
-import com.tigerbk.project1.biz.auth.sns.vo.SignInResCvo;
-import com.tigerbk.project1.biz.auth.sns.vo.TokenReqSvo;
-import com.tigerbk.project1.biz.auth.sns.vo.TokenResSvo;
+import com.tigerbk.project1.biz.auth.sns.vo.*;
 import com.tigerbk.project1.dto.TbCustMasterDto;
 import com.tigerbk.project1.entity.TbCustMaster;
 import com.tigerbk.project1.enums.AuthProvider;
@@ -64,19 +61,16 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
 
     @Override
     @Transactional
-    public SignInResCvo redirectByToken(TokenReqSvo tokenRequest) {
+    public SignInResCvo redirectByToken(AuthRegVo authRegVo) {
 
-        if (!StringUtils.hasText(tokenRequest.getAccessToken())) {
+        if (!StringUtils.hasText(authRegVo.getAccessToken())) {
             throw new BadRequestException("CANNOT_FOUND_AccessToken");
         }
 
         try {
-
-            KakaoUserVo kakaoUserInfo = getUserInfo(tokenRequest.getAccessToken());
+            KakaoUserVo kakaoUserInfo = getUserInfo(authRegVo.getAccessToken());
             log.debug("kakaoUserInfo : {}", kakaoUserInfo.toString());
-
             String accessToken = jwtUtil.getAccessToken(String.valueOf(kakaoUserInfo.getId()));
-
             String refreshToken = jwtUtil.getRefreshToken(String.valueOf(kakaoUserInfo.getId()));
 
             if (!userRepository.existsByCustId(String.valueOf(kakaoUserInfo.getId()))) {
@@ -100,81 +94,82 @@ public class KakaoSvc implements RequestSvc<KakaoUserVo> {
             HashMap<String, Object> uinfo = new HashMap<>();
             uinfo.put("id", kakaoUserInfo.getId());
             uinfo.put("email", kakaoUserInfo.getKakaoAccount().getEmail());
-
             uinfo.put("nickname", kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
             uinfo.put("picture", kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
-
-            // firebase 로그인 처리
             String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
-
-            // 로그인 시
-            return SignInResCvo.builder().authProvider(AuthProvider.KAKAO).kakaoUserInfo(kakaoUserInfo).accessToken(accessToken).firebaseToken(customToken).refreshToken(refreshToken).build();
+            return SignInResCvo.builder()
+                    .authProvider(AuthProvider.KAKAO)
+                    .kakaoUserInfo(kakaoUserInfo)
+                    .accessToken(accessToken)
+                    .firebaseToken(customToken)
+                    .refreshToken(refreshToken)
+                    .build();
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new DefaultException("서비스 처리중오류발생 : " + e.getMessage());
         }
     }
+//
+//    @Override
+//    public SignInResCvo redirectByCode(AuthRegVo authRegVo) {
+//
+//        TokenResSvo tokenResponse = getAccessToken(authRegVo);
+//        log.debug("tokenResponse : {}", tokenResponse.toString());
+//        KakaoUserVo kakaoUserInfo = getUserInfo(tokenResponse.getAccessToken());
+//        log.debug("kakaoUserInfo : {}", kakaoUserInfo.toString());
+//
+//        try {
+//            String accessToken = jwtUtil.getAccessToken(String.valueOf(kakaoUserInfo.getId()));
+//
+//            String refreshToken = jwtUtil.getRefreshToken(String.valueOf(kakaoUserInfo.getId()));
+//
+//            if (!userRepository.existsByCustId(String.valueOf(kakaoUserInfo.getId()))) {
+//                // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
+//                var dto = TbCustMasterDto.builder()
+//                        .custId(Long.toString(kakaoUserInfo.getId()))
+//                        .provider(AuthProvider.KAKAO.name())
+//                        .birthday(kakaoUserInfo.getKakaoAccount().getBirthday())
+//                        .email(kakaoUserInfo.getKakaoAccount().getEmail())
+//                        .custNm(StringUtils.hasText(kakaoUserInfo.getKakaoAccount().getName()) ? kakaoUserInfo.getKakaoAccount().getName() : kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
+//                        .nickNm(kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
+//                        .hpNo(kakaoUserInfo.getKakaoAccount().getPhoneNumber())
+//                        .profilePath(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
+//                        .role(Role.USER.toString())
+//                        .build();
+//
+//                userRepository.save(TbCustMasterMapper.INSTANCE.toEntity(dto));
+//            }
+//            // firebase 로그인 처리
+//            HashMap<String, Object> uinfo = new HashMap<>();
+//            uinfo.put("id", kakaoUserInfo.getId());
+//            uinfo.put("email", kakaoUserInfo.getKakaoAccount().getEmail());
+//            uinfo.put("nickname", kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
+//            uinfo.put("picture", kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+//            String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
+//            log.debug("------------------------------");
+//            log.debug("customToken : " + customToken);
+//            log.debug("------------------------------");
+//            return SignInResCvo.builder().authProvider(AuthProvider.KAKAO).kakaoUserInfo(kakaoUserInfo)
+//                    .accessToken(accessToken)
+//                    .refreshToken(refreshToken)
+//                    .firebaseToken(customToken)
+//                    .userid(kakaoUserInfo.getId().toString()).build();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new BadRequestException("redirectByCode 서버 자체토큰 생성시 오류가 발생했습니다. ");
+//        }
+//    }
 
     @Override
-    public SignInResCvo redirectByCode(TokenReqSvo tokenRequest) {
-
-        TokenResSvo tokenResponse = getAccessToken(tokenRequest);
-        log.debug("tokenResponse : {}", tokenResponse.toString());
-        KakaoUserVo kakaoUserInfo = getUserInfo(tokenResponse.getAccessToken());
-        log.debug("kakaoUserInfo : {}", kakaoUserInfo.toString());
-
-        try {
-            String accessToken = jwtUtil.getAccessToken(String.valueOf(kakaoUserInfo.getId()));
-
-            String refreshToken = jwtUtil.getRefreshToken(String.valueOf(kakaoUserInfo.getId()));
-
-            if (!userRepository.existsByCustId(String.valueOf(kakaoUserInfo.getId()))) {
-                // 회원가입 유도 해야 함. 서비스를 호출 하던지 프로트 화면에서 아래 정보로 구현하든지
-                var dto = TbCustMasterDto.builder()
-                        .custId(Long.toString(kakaoUserInfo.getId()))
-                        .provider(AuthProvider.KAKAO.name())
-                        .birthday(kakaoUserInfo.getKakaoAccount().getBirthday())
-                        .email(kakaoUserInfo.getKakaoAccount().getEmail())
-                        .custNm(StringUtils.hasText(kakaoUserInfo.getKakaoAccount().getName()) ? kakaoUserInfo.getKakaoAccount().getName() : kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
-                        .nickNm(kakaoUserInfo.getKakaoAccount().getProfile().getNickname())
-                        .hpNo(kakaoUserInfo.getKakaoAccount().getPhoneNumber())
-                        .profilePath(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
-                        .role(Role.USER.toString())
-                        .build();
-
-                userRepository.save(TbCustMasterMapper.INSTANCE.toEntity(dto));
-            }
-            // firebase 로그인 처리
-            HashMap<String, Object> uinfo = new HashMap<>();
-            uinfo.put("id", kakaoUserInfo.getId());
-            uinfo.put("email", kakaoUserInfo.getKakaoAccount().getEmail());
-            uinfo.put("nickname", kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
-            uinfo.put("picture", kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
-            String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
-            log.debug("------------------------------");
-            log.debug("customToken : " + customToken);
-            log.debug("------------------------------");
-            return SignInResCvo.builder().authProvider(AuthProvider.KAKAO).kakaoUserInfo(kakaoUserInfo)
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .firebaseToken(customToken)
-                    .userid(kakaoUserInfo.getId().toString()).build();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BadRequestException("redirectByCode 서버 자체토큰 생성시 오류가 발생했습니다. ");
-        }
-    }
-
-    @Override
-    public TokenResSvo getAccessToken(TokenReqSvo tokenRequest) {
+    public TokenResSvo getAccessToken(AuthRegVo authRegVo) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", GRANT_TYPE);
         formData.add("redirect_uri", REDIRECT_URI);
         formData.add("client_id", CLIENT_ID);
         formData.add("client_secret", CLIENT_SECRET);
-        formData.add("code", tokenRequest.getCode());
+        formData.add("code", authRegVo.getCode());
 
         log.debug("formData : {}", formData);
 

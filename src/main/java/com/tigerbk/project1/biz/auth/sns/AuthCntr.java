@@ -2,21 +2,16 @@ package com.tigerbk.project1.biz.auth.sns;
 
 import com.google.firebase.auth.FirebaseAuthException;
 
-import com.tigerbk.project1.biz.auth.sns.vo.SignInResCvo;
+import com.tigerbk.project1.biz.auth.sns.vo.AuthRegVo;
 import com.tigerbk.project1.biz.auth.sns.vo.TokenReqSvo;
 import com.tigerbk.project1.common.vo.ResData;
-import com.tigerbk.project1.exception.BadRequestException;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,18 +85,19 @@ public class AuthCntr {
      * Token 를 받아 회원가입,파이어베이스가입 처리후 리
      */
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
-    @Operation(summary = "App에서 인증완료시 Token으로 로그인 처리 서비스", description = "Oaut2를 통해 Token 으로 로그인 처리")
+    @Operation(summary = "App에서 인증완료후 얻은 Token으로 로그인 처리 서비스", description = "token으로 사용자 정보를 조회하여 회원가입 처리")
     @PostMapping("/auth/joinbytoken")
-    public ResponseEntity<?> joinByToken(@Valid @RequestBody TokenReqSvo tokenInSVO) {
+    public ResponseEntity<?> joinByToken(@Valid @RequestBody AuthRegVo authRegVo) {
 
-        return ResData.SUCCESS(authService.redirectByToken(tokenInSVO));
+        return ResData.SUCCESS(authService.redirectByToken(authRegVo));
     }
 
+
     // 만료된 리플레쉬토큰 재생성
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK!!")})
     @Operation(summary = "만료된 토큰 refreshToken으로 재생성 처리 서비스", description = "refreshToken을 입력받아 accessToken, refreshToken 를 반환")
     @PostMapping("/auth/refreshtoken")
-    public ResponseEntity<?> refreshToken(@Valid  @RequestBody TokenReqSvo tokenRequest) {
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenReqSvo tokenRequest) {
         return ResData.SUCCESS(authService.refreshToken(tokenRequest));
     }
 
@@ -115,10 +111,6 @@ public class AuthCntr {
     // firebase clound 저장된 uid 로 customtoken 생성하여 리턴
     @GetMapping("/error")
     public ResponseEntity<?> error() throws FirebaseAuthException {
-        return ResData.SUCCESS("error");
+        return ResData.SUCCESS("Error Page !!");
     }
-
-
-
-
 }

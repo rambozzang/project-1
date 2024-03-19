@@ -2,6 +2,7 @@ package com.tigerbk.project1.biz.auth.sns;
 
 import com.google.firebase.auth.FirebaseAuthException;
 
+import com.tigerbk.project1.biz.auth.sns.vo.AuthRegVo;
 import com.tigerbk.project1.biz.auth.sns.vo.SignInResCvo;
 import com.tigerbk.project1.biz.auth.sns.vo.TokenReqSvo;
 import com.tigerbk.project1.enums.AuthProvider;
@@ -13,6 +14,8 @@ import com.tigerbk.project1.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 
 @Slf4j
@@ -31,46 +34,46 @@ public class AuthSvc {
 
 
     // 제공사에서 인증완료 후 리다렉트해서 온 프로세스
-    public SignInResCvo redirect(TokenReqSvo tokenRequest) {
+//    public SignInResCvo redirect(TokenReqSvo tokenRequest) {
+//
+//        // 인증업체명 가져오기
+//        String provider = tokenRequest.getRegistrationId();
+//        if (provider.isEmpty()) {
+//            throw new BadRequestException(provider + "는 지원 하지 않는 인증업체입니다.");
+//        }
+//
+//        if (AuthProvider.KAKAO.getAuthProvider().equals(provider.toUpperCase())) {
+//            return kakaoRequestService.redirectByCode(tokenRequest);
+//        }
+//
+//        if (AuthProvider.NAVER.getAuthProvider().equals(provider.toUpperCase())) {
+//            return naverRequestService.redirectByCode(tokenRequest);
+//        }
+//
+//        if (AuthProvider.GOOGLE.getAuthProvider().equals(provider.toUpperCase())) {
+//            return googleRequestService.redirectByCode(tokenRequest);
+//        }
+//
+//        throw new BadRequestException("지원 하지 않는 인증업체인빈다." + provider.toUpperCase());
+//    }
 
-        // 인증업체명 가져오기
-        String provider = tokenRequest.getRegistrationId();
-        if (provider.isEmpty()) {
-            throw new BadRequestException(provider + "는 지원 하지 않는 인증업체입니다.");
-        }
-
-        if (AuthProvider.KAKAO.getAuthProvider().equals(provider.toUpperCase())) {
-            return kakaoRequestService.redirectByCode(tokenRequest);
-        }
-
-        if (AuthProvider.NAVER.getAuthProvider().equals(provider.toUpperCase())) {
-            return naverRequestService.redirectByCode(tokenRequest);
-        }
-
-        if (AuthProvider.GOOGLE.getAuthProvider().equals(provider.toUpperCase())) {
-            return googleRequestService.redirectByCode(tokenRequest);
-        }
-
-        throw new BadRequestException("지원 하지 않는 인증업체인빈다." + provider.toUpperCase());
-    }
-
-    public SignInResCvo redirectByToken(TokenReqSvo tokenRequest) {
-        String provider = tokenRequest.getRegistrationId();
+    public SignInResCvo redirectByToken(AuthRegVo authRegVo) {
+        String provider = authRegVo.getAuthProvider();
 
         if ((provider.isEmpty())) {
             throw new BadRequestException("지원 하지 않는 인증업체인빈다. =>" + provider);
         }
 
         if (AuthProvider.KAKAO.getAuthProvider().equals(provider.toUpperCase())) {
-            return kakaoRequestService.redirectByToken(tokenRequest);
+            return kakaoRequestService.redirectByToken(authRegVo);
         }
 
         if (AuthProvider.NAVER.getAuthProvider().equals(provider.toUpperCase())) {
-            return naverRequestService.redirectByToken(tokenRequest);
+            return naverRequestService.redirectByToken(authRegVo);
         }
 
         if (AuthProvider.GOOGLE.getAuthProvider().equals(provider.toUpperCase())) {
-            return googleRequestService.redirectByToken(tokenRequest);
+            return googleRequestService.redirectByToken(authRegVo);
         }
 
         throw new BadRequestException("지원 하지 않는 인증업체인빈다. =>" + provider.toUpperCase());
@@ -120,6 +123,21 @@ public class AuthSvc {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-
     }
+
+ //   public SignInResCvo regCust(AuthRegVo authRegVo) {
+
+//        // 1 회원가입 여부
+//        if (!userRepository.existsByCustId(String.valueOf(kakaoUserInfo.getId()))) {
+//
+//
+//        // 2.
+//        HashMap<String, Object> uinfo = new HashMap<>();
+//        uinfo.put("id", authRegVo.getId());
+//        uinfo.put("email", authRegVo.getKakaoAccount().getEmail());
+//        uinfo.put("nickname", authRegVo.getKakaoAccount().getProfile().getNickname());
+//        uinfo.put("picture", authRegVo.getKakaoAccount().getProfile().getProfileImageUrl());
+//        String customToken = fireBaseAuthRepo.createFirebaseCustomToken(uinfo);
+
+  //  }
 }
