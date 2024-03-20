@@ -1,17 +1,19 @@
 package com.tigerbk.project1.dto;
 
+import com.tigerbk.project1.entity.TbBoardMaster;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 /**
  * DTO for {@link com.tigerbk.project1.entity.TbBoardMaster}
  */
 @Value
 public class TbBoardMasterDto implements Serializable {
-    Long boardId;
+    Long id;
     @Size(max = 4)
     String typeCd;
     @Size(max = 4)
@@ -24,6 +26,7 @@ public class TbBoardMasterDto implements Serializable {
     String subject;
     String contents;
     Integer depthNo;
+    TbBoardMaster parentId;
     Integer sortNo;
     @Size(max = 1)
     String delYn;
@@ -33,4 +36,5 @@ public class TbBoardMasterDto implements Serializable {
     Instant chgDtm;
     @Size(max = 100)
     String chgCustId;
+    List<TbBoardMasterDto> child;
 }

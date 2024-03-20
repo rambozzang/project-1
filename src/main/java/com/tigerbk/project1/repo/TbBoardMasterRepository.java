@@ -12,7 +12,7 @@ public interface TbBoardMasterRepository extends JpaRepository<TbBoardMaster, Lo
 
     Page<TbBoardMaster> findAll(Specification<TbBoardMaster> spec, Pageable pageable);
 
-    List<TbBoardMaster> findAllByBoardIdIn(List<Long> boardId);
+    List<TbBoardMaster> findAllByIdIn(List<Long> id);
 
-    List<TbBoardMaster> findAllByParentIdIn(List<Long> parentId);
+    List<TbBoardMaster> findAllByParentIdIn(List<Long> id);
 }

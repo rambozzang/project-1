@@ -1,7 +1,10 @@
 package com.tigerbk.project1.biz.board.svc;
 
 import com.tigerbk.project1.biz.board.vo.BoardSvo;
+import com.tigerbk.project1.dto.TbBoardMasterDto;
 import com.tigerbk.project1.entity.TbBoardMaster;
+import com.tigerbk.project1.entity.spec.TbBoardMasterSpec;
+import com.tigerbk.project1.mapper.TbBoardMasterMapper;
 import com.tigerbk.project1.repo.TbBoardMasterRepository;
 import com.tigerbk.project1.utils.Cmapper;
 import jakarta.transaction.Transactional;
@@ -16,8 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -33,25 +36,29 @@ public class BoardSvc {
 
     @Transactional
     public List<BoardSvo.BoardOutVo> findAllBoardList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
-       Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
+        Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
                 Sort.by(Sort.Direction.ASC, "crtDtm")
-                        .and(Sort.by(Sort.Direction.ASC, "boardId")
+                        .and(Sort.by(Sort.Direction.ASC, "id")
                                 .and(Sort.by(Sort.Direction.ASC, "depthNo")
                                         .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
         Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
-//        boardSpec = boardSpec.and(TbBoardMasterSpec.equalParentId(inVo.getParentId()));
-          Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
-//        List<Long> boarIdList = boardPage.stream().map(TbBoardMaster::getBoardId).collect(Collectors.toList());
-//        boarIdList.add(Long.valueOf(0));
-//        List<TbBoardMaster> boardAllList = tbBoardMasterRepository.findAllByParentIdIn(boarIdList);
-//        List<BoardSvo.BoardOutVo> boardOutVoList = new ArrayList<>();
-//        boarIdList.stream().forEach(idElement -> {
-//            boardOutVoList.addAll(boardAllList.stream()
-//                    .filter(Element -> (idElement.equals(Element.getBoardId()) && Long.valueOf(0).equals(Element.getParentId()))
-//                            || idElement.equals(Element.getParentId()))
-//                    .map(Element -> cmapper.run(Element,  BoardSvo.BoardOutVo.class))
-//                    .toList());
-//            });
-        return boardPage.stream().map(e -> cmapper.run(e, BoardSvo.BoardOutVo.class)).collect(Collectors.toList());
+        spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
+        Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
+        List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
+        List<BoardSvo.BoardOutVo> boardOutVoList = new ArrayList<>();
+        this.getBoardList(boardDto, boardOutVoList);
+        return boardOutVoList;
+    }
+
+
+    public void getBoardList(List<TbBoardMasterDto> dtoList, List<BoardSvo.BoardOutVo> OutVoList) {
+        dtoList.stream().forEach(e -> {
+            BoardSvo.BoardOutVo outVo = cmapper.run(e, BoardSvo.BoardOutVo.class);
+            outVo.setParentBoradId(e.getParentId() != null ? e.getParentId().getId() : Long.valueOf(0));
+            OutVoList.add(outVo);
+            if (e.getChild().size() != 0) {
+                getBoardList(e.getChild(), OutVoList);
+            }
+        });
     }
 }

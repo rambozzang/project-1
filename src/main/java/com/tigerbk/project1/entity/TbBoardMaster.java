@@ -1,9 +1,16 @@
 package com.tigerbk.project1.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import jdk.jfr.Category;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,8 +25,8 @@ import java.util.List;
 public class TbBoardMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARD_ID", nullable = false)
-    private Long boardId;
+    @Column(name = "BOARD_ID")
+    private Long id;
 
     @Size(max = 4)
     @Column(name = "TYPE_CD", length = 4)
@@ -50,6 +57,7 @@ public class TbBoardMaster {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
+    @NotFound(action = NotFoundAction.IGNORE)
     private TbBoardMaster parentId;
 
     @Column(name = "SORT_NO")
@@ -73,7 +81,9 @@ public class TbBoardMaster {
     @Column(name = "CHG_CUST_ID", length = 100)
     private String chgCustId;
 
-    @OneToMany(mappedBy = "parentId", fetch = FetchType.LAZY,
-    cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "parentId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("depthNo asc")
+    @JsonManagedReference
     private List<TbBoardMaster> child = new ArrayList<>();
 }

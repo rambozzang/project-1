@@ -1,5 +1,7 @@
 package com.tigerbk.project1.biz.board.vo;
 
+import com.tigerbk.project1.dto.TbBoardMasterDto;
+import com.tigerbk.project1.entity.TbBoardMaster;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -10,6 +12,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SuperBuilder
@@ -38,7 +42,7 @@ public class BoardSvo {
          */
         @Schema(description = "게시물번호", example = "1")
         @NotNull(message = "게시물번호가 존재하지 않습니다. 다시 확인해 주세요.")
-        private BigInteger boardId;
+        private Long id;
 
         /**
          * 게시판 구분코드
@@ -93,7 +97,7 @@ public class BoardSvo {
          */
         @Schema(description = "부모 게시글ID", example = "12121312")
         @PositiveOrZero(message = "부모 게시글ID는 0보다 작을수 없습니다.")
-        private BigInteger parentId;
+        private Long parentId;
 
         /**
          * 게시글 순서
@@ -123,7 +127,7 @@ public class BoardSvo {
          */
         @Schema(description = "게시물번호", example = "1")
         @NotNull(message = "게시물번호가 존재하지 않습니다. 다시 확인해 주세요.")
-        private BigDecimal boardId;
+        private Long id;
 
         /**
          * 게시판 구분코드
@@ -171,21 +175,21 @@ public class BoardSvo {
          */
         @Schema(description = "게시물 계층", example = "0")
         @PositiveOrZero(message = "게시물 계층은 0보다 작을수 없습니다.")
-        private String depthNo;
+        private Integer depthNo;
 
         /**
          * 부모 게시글ID
          */
         @Schema(description = "부모 게시글ID", example = "1212312")
         @PositiveOrZero(message = "부모 게시글ID는 0보다 작을수 없습니다.")
-        private BigInteger parentId;
+        private Long parentBoradId;
 
         /**
          * 게시글 순서
          */
         @Schema(description = "게시글 순서", example = "내용")
         @PositiveOrZero(message = "게시글 순서는 0보다 작을수 없습니다.")
-        private String sortNo;
+        private Integer sortNo;
 
         /**
          * 게시물 삭제 여부
@@ -193,6 +197,5 @@ public class BoardSvo {
         @Schema(description = "게시물 삭제 여부", example = "N")
         @Size(min = 1, max = 1, message = "게시물 삭제 여부는 1자리여야 합니다.")
         private String delYn;
-
     }
 }
