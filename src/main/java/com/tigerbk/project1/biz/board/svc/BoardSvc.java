@@ -43,6 +43,9 @@ public class BoardSvc {
                                         .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
         Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
         spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
+        if (!("".equals(inVo.getId()) || inVo.getId() == null)) {
+            spec = spec.and(TbBoardMasterSpec.equalId(inVo.getId()));
+        }
         Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
         List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
         List<BoardSvo.BoardOutVo> boardOutVoList = new ArrayList<>();

@@ -5,6 +5,7 @@ import com.tigerbk.project1.biz.board.vo.BoardCvo;
 import com.tigerbk.project1.biz.board.vo.BoardSvo;
 import com.tigerbk.project1.common.vo.ResData;
 import com.tigerbk.project1.dto.TbBoardMasterDto;
+import com.tigerbk.project1.utils.Cmapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,6 +31,8 @@ public class BoardCtrl {
 
     private final BoardSvc boardSvc;
 
+    private final Cmapper cmapper;
+
     @Operation(summary = "01.통합게시판 조회", description = "\n### 통합게시판 조회 서비스 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "통합게시판 조회 성공", content = @Content(schema = @Schema(implementation = BoardCvo.BoardInVo.class))),
@@ -37,11 +40,7 @@ public class BoardCtrl {
     @PostMapping(value = "/board/searchboardlist")
     public ResponseEntity<?> searchBoardList(@RequestBody BoardCvo.BoardInVo inCvo) throws Exception {
         try {
-            BoardSvo.BoardInVo inSvo = new BoardSvo.BoardInVo();
-            inSvo.setPageNum(inCvo.getPageNum());
-            inSvo.setPageSize(inCvo.getPageSize());
-            inSvo.setId(inCvo.getId());
-            List<BoardSvo.BoardOutVo> boardOutVo = boardSvc.findAllBoardList(inSvo);
+            BoardSvo.BoardInVo inSvo = cmapper.run(inCvo, BoardSvo.BoardInVo.class);
             return ResData.SUCCESS(boardSvc.findAllBoardList(inSvo),"통합게시판 조회 정상 조회하였습니다.");
         } catch (Exception e) {
             log.error(e.getMessage());
