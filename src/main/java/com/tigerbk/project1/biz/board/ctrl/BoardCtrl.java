@@ -23,6 +23,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+*
+*@Package       : com.tigerbk.project1.biz.board.ctrl
+*@name          : BoardCtrl.java
+*@date          : 2024-03-20 오후 1:05
+*@author        : Juheon Kim
+*@version       : 1.0.0
+**/
 @Tag(name = "BOARD-01.통합게시판 조회", description = "통합게시판 게시물 정보를 조회한다.")
 @Slf4j
 @RestController
@@ -33,6 +41,13 @@ public class BoardCtrl {
 
     private final Cmapper cmapper;
 
+    /**
+    *
+    * @name     : BoardCtrl.searchBoardList
+    * @author   : JuHeon Kim
+    * @param    : 
+    * @return   :
+    **/
     @Operation(summary = "01.통합게시판 조회", description = "\n### 통합게시판 조회 서비스 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "통합게시판 조회 성공", content = @Content(schema = @Schema(implementation = BoardCvo.BoardInVo.class))),

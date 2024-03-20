@@ -22,7 +22,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+* @package      : com.tigerbk.project1.biz.board.svc
+* @name         : BoardSvc.java
+* @date         : 2024-03-20 오후 1:05
+* @author       : Juheon Kim
+* @version      : 1.0.0
+**/
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,6 +40,13 @@ public class BoardSvc {
     private final Cmapper cmapper;
 
 
+    /**
+    *
+    * @name     : BoardSvc.findAllBoardList
+    * @author   : JuHeon Kim
+    * @param    :
+    * @return   :
+    **/
     @Transactional
     public List<BoardSvo.BoardOutVo> findAllBoardList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
         Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
@@ -54,6 +67,13 @@ public class BoardSvc {
     }
 
 
+    /**
+    *
+    * @name     : BoardSvc.getBoardList
+    * @author   : JuHeon Kim
+    * @param    :
+    * @return   :
+    **/
     public void getBoardList(List<TbBoardMasterDto> dtoList, List<BoardSvo.BoardOutVo> OutVoList) {
         dtoList.stream().forEach(e -> {
             BoardSvo.BoardOutVo outVo = cmapper.run(e, BoardSvo.BoardOutVo.class);
