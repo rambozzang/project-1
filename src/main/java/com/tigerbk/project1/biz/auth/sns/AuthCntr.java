@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "00.OAuth2 인증", description = "Token 인증 서비스.")
+@Tag(name = "00.oauth 인증", description = "SNS 회원가입 서비스.")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,97 +25,23 @@ public class AuthCntr {
     private final KakaoSvc kakaoSvc;
     private final  NaverSvc naverSvc;
     private final GoogleSvc googleSvc;
-
-
-    /*
-     * 각 제공사 인증화면에서 인증 완료후 호출되는 페이지
-     * 호출시 code 값으로 다시 제공사쪽으로 accesstoken을 요청한다.
-     */
-//    @Operation(summary = "demo 조회", description = "demo 조회 메서드입니다.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = SignInResCvo.class))),
-//    })
-//    @GetMapping("/oauth2/web/{registrationId}")
-//    public ResponseEntity<?> redirectWEB(
-//
-//            @PathVariable("registrationId") String registrationId,
-//            @RequestParam("code") String code,
-//            @RequestParam("state") String state) {
-//
-//        return ResData.SUCCESS(authService.redirect(TokenReqSvo.builder()
-//                .registrationId(registrationId)
-//                .code(code)
-//                .state(state).build()));
-//    }
-
-
-    /*
-     * 각 제공사 인증화면에서 인증 완료후 호출되는 페이지
-     * 호출시 code 값으로 다시 제공사쪽으로 accesstoken을 요청한다.
-     */
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
-//    @Operation(summary = "App 에서 인증후 제공업체로 부터 Redirect URL", description = "Oaut2를 통해 로그인 후 호출되는  서비스")
-//    @GetMapping("/oauth2/mobile/{registrationId}")
-//    public ResponseEntity<Object> redirectMobliie2(
-//
-//            @PathVariable("registrationId") String registrationId,
-//            @RequestParam("code") String code,
-//            @RequestParam("state") String state) {
-//
-//        try {
-//            String location = "auth-callback://success?";
-//
-//            SignInResCvo vo = authService.redirect(TokenReqSvo.builder()
-//                    .registrationId(registrationId)
-//                    .code(code)
-//                    .state(state).build());
-//            String param = "accessToken=".concat(vo.getAccessToken());
-//            param = param.concat("&refreshToken=").concat(vo.getRefreshToken());
-//            param = param.concat("&firebaseToken=").concat(vo.getFirebaseToken());
-//            param = param.concat("&userid=").concat(vo.getUserid());
-//
-//            HttpHeaders heads = new HttpHeaders();
-//            heads.add("Location", location.concat(param));
-//            return new ResponseEntity<>(null, heads, HttpStatus.TEMPORARY_REDIRECT);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new BadRequestException("oauth2 인증후 서버 자체토큰 생성시 오류가 발생했습니다. ");
-//        }
-//    }
-
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "KAKAO App에서 얻은 정보로 로그인 처리 서비스", description = "KAKAO User 정보로 회원가입한다.")
     @PostMapping("/auth/kakaojoin")
     public ResponseEntity<?> joinBykakao(@Valid @RequestBody KakaoUserVo kakaoUserVo) {
         return ResData.SUCCESS(kakaoSvc.SignInProc(kakaoUserVo));
     }
-
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "Naver App에서 얻은 정보로 로그인 처리 서비스", description = "Naver User 정보로 회원가입한다.")
     @PostMapping("/auth/naverjoin")
     public ResponseEntity<?> joinBynaver(@Valid @RequestBody NaverUserVo naverUserVo) {
         return ResData.SUCCESS(naverSvc.SignInProc(naverUserVo));
     }
-
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
     @Operation(summary = "Google App에서 얻은 정보로 로그인 처리 서비스", description = "Google User 정보로 회원가입한다.")
     @PostMapping("/auth/googlejoin")
     public ResponseEntity<?> joinBygoogle(@Valid @RequestBody GoogleUserVo googleUserVo) {
         return ResData.SUCCESS(googleSvc.SignInProc(googleUserVo));
-    }
-
-
-
-    /*
-     * Client App 에서 이미 이증후 accessToken 까지 받은 상태로
-     * Token 를 받아 회원가입,파이어베이스가입 처리후 리
-     */
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK !!")})
-    @Operation(summary = "App에서 인증완료후 얻은 Token으로 로그인 처리 서비스", description = "token으로 사용자 정보를 조회하여 회원가입 처리")
-    @PostMapping("/auth/joinbytoken")
-    public ResponseEntity<?> joinByToken(@Valid @RequestBody AuthRegVo authRegVo) {
-
-        return ResData.SUCCESS(authService.redirectByToken(authRegVo));
     }
 
 
@@ -126,14 +52,12 @@ public class AuthCntr {
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenReqSvo tokenRequest) {
         return ResData.SUCCESS(authService.refreshToken(tokenRequest));
     }
-
     // firebase clound 저장된 uid 로 customtoken 생성하여 리턴
     @GetMapping("/auth/getfirebasecustomtoken")
     public ResponseEntity<?> getFirebaseCutomTokenByuid(
             @RequestParam("uid") String uid) throws FirebaseAuthException {
         return ResData.SUCCESS(authService.getFirebaseCutomTokenByuid(uid));
     }
-
     // firebase clound 저장된 uid 로 customtoken 생성하여 리턴
     @GetMapping("/error")
     public ResponseEntity<?> error() throws FirebaseAuthException {

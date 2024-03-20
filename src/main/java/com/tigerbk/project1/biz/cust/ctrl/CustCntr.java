@@ -23,14 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CustCntr {
-
-
     private final UserAuthSvc userAuthSvc;
-
     private final CustSvc custSvc;
-
     private final JwtUtil jwtUtil;
-
 
     @Operation(summary = "01.토큰을 통한 사용자정보조회", description = "\n### 토큰을 통한 사용자 정보를 조회한다." +
             "\n- Input : 온니 인증 ")
