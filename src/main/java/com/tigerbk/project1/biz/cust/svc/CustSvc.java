@@ -32,10 +32,9 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustId(custId)
                 .orElseThrow(() -> new DefaultException("회원 정보가 없습니다. 다시 입력해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setAccssToken(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
         if(!"".equals(outvo.getFcmId())){
             tbCustMaster.setFcmId(fcmId);
-            outvo.setFcmId(fcmId);
             custRepo.save(tbCustMaster);
         }
         return outvo;
@@ -49,7 +48,7 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustIdAndPinPasswd(custId, pinPasswd)
                 .orElseThrow(() -> new DefaultException("비밀번호를 다시 입력해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setAccssToken(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
 
         return outvo;
     }
@@ -59,7 +58,7 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustId(custId)
                 .orElseThrow(() -> new DefaultException("Bio 정보를 다시 입력해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setAccssToken(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
 
         return outvo;
     }
@@ -69,7 +68,7 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustIdAndPattenPasswd(custId, patternPwd)
                 .orElseThrow(() -> new DefaultException("패턴번호를 다시 확인해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setAccssToken(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
 
         return outvo;
     }

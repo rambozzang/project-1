@@ -45,8 +45,8 @@ public class CustVo {
         private String profilePath;
 
         /**  accssToken  */
-        @Schema(description = "accssToken", example = "1")
-        private String accssToken;
+        @Schema(description = "accessToken", example = "1")
+        private String accessToken;
     }
 
     @Getter
