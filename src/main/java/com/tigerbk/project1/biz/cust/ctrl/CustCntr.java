@@ -3,6 +3,7 @@ package com.tigerbk.project1.biz.cust.ctrl;
 
 import com.tigerbk.project1.biz.auth.UserAuthSvc;
 import com.tigerbk.project1.biz.cust.svc.CustSvc;
+import com.tigerbk.project1.biz.cust.vo.CustVo;
 import com.tigerbk.project1.common.vo.ResData;
 import com.tigerbk.project1.exception.ErrorResponse;
 import com.tigerbk.project1.security.JwtUtil;
@@ -34,8 +35,9 @@ public class CustCntr {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@Valid @RequestParam("custId") String custId, @RequestParam("fcmId") String fcmId )  throws Exception {
-        return ResData.SUCCESS(custSvc.login(custId, fcmId));
+    public ResponseEntity<?> login(@Valid @RequestBody CustVo.loginVo loginVo)  throws Exception {
+
+        return ResData.SUCCESS(custSvc.login(loginVo.getCustId(),loginVo.getFcmId()));
     }
 
 

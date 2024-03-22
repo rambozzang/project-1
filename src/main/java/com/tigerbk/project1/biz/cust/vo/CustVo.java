@@ -47,9 +47,25 @@ public class CustVo {
         /**  accssToken  */
         @Schema(description = "accssToken", example = "1")
         private String accssToken;
-
-
-
-
     }
+
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class loginVo {
+
+        /**
+         * custId
+         */
+        @Schema(description = "custId", example = "1")
+        private String custId;
+        /**  nickNm  */
+        @Schema(description = "fcmId", example = "1")
+        private String fcmId;
+    }
+
+
 }
