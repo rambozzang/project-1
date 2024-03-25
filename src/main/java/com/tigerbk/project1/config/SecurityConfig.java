@@ -68,6 +68,7 @@ public class SecurityConfig {
                     corsConfig.setAllowedOrigins(List.of(
                             "https://localhost",
                             "http://www.tigerbk.com",
+                            "https://www.tigerbk.com",
                             "https://project1.tigerbk.com",
                             "https://project2.tigerbk.com",
                             "https://project3.tigerbk.com",
