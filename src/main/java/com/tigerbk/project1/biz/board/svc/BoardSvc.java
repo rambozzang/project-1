@@ -1,6 +1,7 @@
 package com.tigerbk.project1.biz.board.svc;
 
 import com.tigerbk.project1.biz.board.vo.BoardSvo;
+import com.tigerbk.project1.common.vo.PageResData;
 import com.tigerbk.project1.dto.TbBoardMasterDto;
 import com.tigerbk.project1.entity.TbBoardMaster;
 import com.tigerbk.project1.entity.spec.TbBoardMasterSpec;
@@ -37,7 +38,6 @@ public class BoardSvc {
 
     private final Cmapper cmapper;
 
-
     /**
     *
     * @name     : BoardSvc.findAllBoardList
@@ -46,7 +46,7 @@ public class BoardSvc {
     * @return   :
     **/
     @Transactional
-    public List<BoardSvo.ParallelOutVo> findAllPallelList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
+    public BoardSvo.BoardOutVo findAllPallelList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
         Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
                 Sort.by(Sort.Direction.ASC, "crtDtm")
                         .and(Sort.by(Sort.Direction.ASC, "id")
@@ -59,9 +59,13 @@ public class BoardSvc {
         }
         Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
         List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
-        List<BoardSvo.ParallelOutVo> boardOutVoList = new ArrayList<>();
-        this.getParallelList(boardDto, boardOutVoList);
-        return boardOutVoList;
+        List<BoardSvo.BoardInfo> boardInfoList = new ArrayList<>();
+        this.getParallelList(boardDto, boardInfoList);
+        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
+        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        boardOutVo.setPageData(pageData);
+        boardOutVo.setBoardInfoList(boardInfoList);
+        return boardOutVo;
     }
 
     /**
@@ -72,7 +76,7 @@ public class BoardSvc {
      * @return   :
      **/
     @Transactional
-    public List<BoardSvo.HierachiOutVo> findAllHierachiList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
+    public BoardSvo.BoardOutVo findAllHierachiList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
         Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
                 Sort.by(Sort.Direction.ASC, "crtDtm")
                         .and(Sort.by(Sort.Direction.ASC, "id")
@@ -85,16 +89,20 @@ public class BoardSvc {
         }
         Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
         List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
-        List<BoardSvo.HierachiOutVo> hierachiOutVoList = new ArrayList<>();
+        List<BoardSvo.BoardInfo> hierachiOutVoList = new ArrayList<>();
         boardDto.stream().forEach(e -> {
             List<BoardSvo.ChildOutVo> childOutVoList = new ArrayList<>();
             this.getHierachiList(e, childOutVoList);
-            BoardSvo.HierachiOutVo hierachiOutVo = cmapper.run(e, BoardSvo.HierachiOutVo.class);
+            BoardSvo.BoardInfo hierachiOutVo = cmapper.run(e, BoardSvo.BoardInfo.class);
             hierachiOutVo.setParentBoradId(Long.valueOf(0));
             hierachiOutVo.setChildOutVoList(childOutVoList);
             hierachiOutVoList.add(hierachiOutVo);
         });
-        return hierachiOutVoList;
+        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
+        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        boardOutVo.setPageData(pageData);
+        boardOutVo.setBoardInfoList(hierachiOutVoList);
+        return boardOutVo;
     }
 
     /**
@@ -104,9 +112,9 @@ public class BoardSvc {
     * @param    :
     * @return   :
     **/
-    public void getParallelList(List<TbBoardMasterDto> dtoList, List<BoardSvo.ParallelOutVo> OutVoList) {
+    public void getParallelList(List<TbBoardMasterDto> dtoList, List<BoardSvo.BoardInfo> OutVoList) {
         dtoList.stream().forEach(e -> {
-            BoardSvo.ParallelOutVo outVo = cmapper.run(e, BoardSvo.ParallelOutVo.class);
+            BoardSvo.BoardInfo outVo = cmapper.run(e, BoardSvo.BoardInfo.class);
             outVo.setParentBoradId(e.getParentId() != null ? e.getParentId().getId() : Long.valueOf(0));
             OutVoList.add(outVo);
             if (e.getChild().size() != 0) {
