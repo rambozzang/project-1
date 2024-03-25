@@ -75,35 +75,35 @@ public class BoardSvc {
      * @param    :
      * @return   :
      **/
-    @Transactional
-    public BoardSvo.BoardOutVo findAllHierachiList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
-        Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
-                Sort.by(Sort.Direction.ASC, "crtDtm")
-                        .and(Sort.by(Sort.Direction.ASC, "id")
-                                .and(Sort.by(Sort.Direction.ASC, "depthNo")
-                                        .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
-        Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
-        spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
-        if (!("".equals(inVo.getId()) || inVo.getId() == null)) {
-            spec = spec.and(TbBoardMasterSpec.equalId(inVo.getId()));
-        }
-        Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
-        List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
-        List<BoardSvo.BoardInfo> hierachiOutVoList = new ArrayList<>();
-        boardDto.stream().forEach(e -> {
-            List<BoardSvo.ChildOutVo> childOutVoList = new ArrayList<>();
-            this.getHierachiList(e, childOutVoList);
-            BoardSvo.BoardInfo hierachiOutVo = cmapper.run(e, BoardSvo.BoardInfo.class);
-            hierachiOutVo.setParentBoradId(Long.valueOf(0));
-            hierachiOutVo.setChildOutVoList(childOutVoList);
-            hierachiOutVoList.add(hierachiOutVo);
-        });
-        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
-        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
-        boardOutVo.setPageData(pageData);
-        boardOutVo.setBoardInfoList(hierachiOutVoList);
-        return boardOutVo;
-    }
+//    @Transactional
+//    public BoardSvo.BoardOutVo findAllHierachiList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
+//        Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
+//                Sort.by(Sort.Direction.ASC, "crtDtm")
+//                        .and(Sort.by(Sort.Direction.ASC, "id")
+//                                .and(Sort.by(Sort.Direction.ASC, "depthNo")
+//                                        .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
+//        Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
+//        spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
+//        if (!("".equals(inVo.getId()) || inVo.getId() == null)) {
+//            spec = spec.and(TbBoardMasterSpec.equalId(inVo.getId()));
+//        }
+//        Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
+//        List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
+//        List<BoardSvo.BoardInfo> hierachiOutVoList = new ArrayList<>();
+//        boardDto.stream().forEach(e -> {
+//            List<BoardSvo.ChildOutVo> childOutVoList = new ArrayList<>();
+//            this.getHierachiList(e, childOutVoList);
+//            BoardSvo.BoardInfo hierachiOutVo = cmapper.run(e, BoardSvo.BoardInfo.class);
+//            hierachiOutVo.setParentBoradId(Long.valueOf(0));
+//            hierachiOutVo.setChildOutVoList(childOutVoList);
+//            hierachiOutVoList.add(hierachiOutVo);
+//        });
+//        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
+//        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+//        boardOutVo.setPageData(pageData);
+//        boardOutVo.setBoardInfoList(hierachiOutVoList);
+//        return boardOutVo;
+//    }
 
     /**
     *

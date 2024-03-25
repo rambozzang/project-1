@@ -310,8 +310,8 @@ public class BoardSvo {
         /**
          * 자식 게시물
          */
-        @Schema(description = "자식 게시물", example = "[]")
-        private List<ChildOutVo> childOutVoList = new ArrayList<>();
+        //@Schema(description = "자식 게시물", example = "[]")
+        //private List<ChildOutVo> childOutVoList = new ArrayList<>();
     }
 
     @Getter
