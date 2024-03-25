@@ -232,11 +232,11 @@ public class BoardSvo {
         @NotNull(message = "게시물번호가 존재하지 않습니다. 다시 확인해 주세요.")
         private Long id;
 
-        /**
-         * 게시물 원글 댓글 수
-         */
-        @Schema(description = "게시물 원글 댓글 수", example = "10")
-        private Long count;
+//        /**
+//         * 게시물 원글 댓글 수
+//         */
+//        @Schema(description = "게시물 원글 댓글 수", example = "10")
+//        private Long count;
 
         /**
          * 게시판 구분코드
