@@ -35,7 +35,7 @@ public class GoogleSvc {
     @Transactional
     public String SignInProc(GoogleUserVo googleUserVo) {
         String accessToken = jwtUtil.getAccessToken(googleUserVo.getUid());
-        if (!userRepository.existsByCustId(googleUserVo.getUid())) {
+        if (userRepository.existsByCustId(googleUserVo.getUid())) {
             return accessToken;
         }
         var dto = TbCustMasterDto.builder()

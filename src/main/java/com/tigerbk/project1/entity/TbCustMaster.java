@@ -5,12 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
+@DynamicUpdate
 @Table(name = "TB_CUST_MASTER")
 public class TbCustMaster {
     @Id

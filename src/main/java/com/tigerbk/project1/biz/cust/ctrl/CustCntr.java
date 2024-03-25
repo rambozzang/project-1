@@ -3,6 +3,7 @@ package com.tigerbk.project1.biz.cust.ctrl;
 
 import com.tigerbk.project1.biz.auth.UserAuthSvc;
 import com.tigerbk.project1.biz.cust.svc.CustSvc;
+import com.tigerbk.project1.biz.cust.vo.CustVo;
 import com.tigerbk.project1.common.vo.ResData;
 import com.tigerbk.project1.exception.ErrorResponse;
 import com.tigerbk.project1.security.JwtUtil;
@@ -33,23 +34,13 @@ public class CustCntr {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/auth/getuserinfo")
-    public ResponseEntity<?> getUserInfo() {
-        return ResData.SUCCESS(userAuthSvc.getSessionUser().toString());
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@Valid @RequestBody CustVo.loginVo loginVo)  throws Exception {
+
+        return ResData.SUCCESS(custSvc.login(loginVo.getCustId(),loginVo.getFcmId()));
     }
 
-    @Operation(
-            summary = "02.로그인 by 패스워드",
-            description = "\n### custId 와 패스워드를 통한 로그인 서비스 "
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PostMapping(value = "/auth/login")
-    public ResponseEntity<?> login(@Valid @RequestBody String custId, String passwd) {
-        return ResData.SUCCESS(userAuthSvc.getSessionUser().toString());
-    }
+
 
     @Operation(
             summary = "03. 로그인 by Pin번호",
@@ -86,7 +77,7 @@ public class CustCntr {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/auth/loginbyBio")
-    public ResponseEntity<?> loginbyBio(@Valid @RequestBody String custId, String bioInfo) throws Exception {
+    public ResponseEntity<?> loginbyBio(@Valid  @RequestParam("custId")String custId,  @RequestParam("bioInfo") String bioInfo) throws Exception {
         return ResData.SUCCESS(custSvc.LoginByBio(custId));
     }
 

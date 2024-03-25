@@ -28,6 +28,19 @@ public class CustSvc {
 //        return custRepo.
 //    }
 
+    public CustVo.InfoOutVo login(String custId , String fcmId) throws Exception {
+        TbCustMaster tbCustMaster = custRepo.findByCustId(custId)
+                .orElseThrow(() -> new DefaultException("회원 정보가 없습니다. 다시 입력해주세요!"));
+        CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
+        if(!"".equals(outvo.getFcmId())){
+            tbCustMaster.setFcmId(fcmId);
+            custRepo.save(tbCustMaster);
+        }
+        return outvo;
+
+    }
+
 
     // 2. Pin번호를 통한 로그인
     public CustVo.InfoOutVo LoginByPinPasswd(@Valid String custId, String pinPasswd) throws Exception {
@@ -35,7 +48,7 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustIdAndPinPasswd(custId, pinPasswd)
                 .orElseThrow(() -> new DefaultException("비밀번호를 다시 입력해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setFcmId(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
 
         return outvo;
     }
@@ -45,7 +58,7 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustId(custId)
                 .orElseThrow(() -> new DefaultException("Bio 정보를 다시 입력해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setFcmId(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
 
         return outvo;
     }
@@ -55,7 +68,7 @@ public class CustSvc {
         TbCustMaster tbCustMaster = custRepo.findByCustIdAndPattenPasswd(custId, patternPwd)
                 .orElseThrow(() -> new DefaultException("패턴번호를 다시 확인해주세요!"));
         CustVo.InfoOutVo outvo = cmapper.run(tbCustMaster, CustVo.InfoOutVo.class);
-        outvo.setFcmId(jwtUtil.getAccessToken(custId));
+        outvo.setAccessToken(jwtUtil.getAccessToken(custId));
 
         return outvo;
     }
