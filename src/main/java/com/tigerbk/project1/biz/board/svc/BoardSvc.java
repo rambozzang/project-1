@@ -5,6 +5,7 @@ import com.tigerbk.project1.common.vo.PageResData;
 import com.tigerbk.project1.dto.TbBoardMasterDto;
 import com.tigerbk.project1.entity.TbBoardMaster;
 import com.tigerbk.project1.entity.spec.TbBoardMasterSpec;
+import com.tigerbk.project1.exception.DefaultException;
 import com.tigerbk.project1.mapper.TbBoardMasterMapper;
 import com.tigerbk.project1.repo.TbBoardMasterRepository;
 import com.tigerbk.project1.utils.Cmapper;
@@ -12,6 +13,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @package      : com.tigerbk.project1.biz.board.svc
@@ -33,6 +36,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BoardSvc {
+    private final ModelMapper modelMapper;
 
     private final TbBoardMasterRepository tbBoardMasterRepository;
 
@@ -61,6 +65,67 @@ public class BoardSvc {
         List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
         List<BoardSvo.BoardInfo> boardInfoList = new ArrayList<>();
         this.getParallelList(boardDto, boardInfoList);
+        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
+        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        boardOutVo.setPageData(pageData);
+        boardOutVo.setBoardInfoList(boardInfoList);
+        return boardOutVo;
+    }
+
+    /**
+     *
+     * @name     : BoardSvc.findAllBoardList
+     * @author   : JuHeon Kim
+     * @param    :
+     * @return   :
+     **/
+    @Transactional
+    public BoardSvo.BoardOutVo findOriginById(@Valid BoardSvo.BoardInVo inVo) throws Exception {
+        Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
+                Sort.by(Sort.Direction.ASC, "crtDtm")
+                        .and(Sort.by(Sort.Direction.ASC, "id")
+                                .and(Sort.by(Sort.Direction.ASC, "depthNo")
+                                        .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
+        Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
+        spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
+        if (!("".equals(inVo.getId()) || inVo.getId() == null)) {
+            spec = spec.and(TbBoardMasterSpec.equalId(inVo.getId()));
+        }
+        Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
+        List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
+        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
+        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        List<BoardSvo.BoardInfo> boardInfoList = boardDto.stream()
+                .map(e -> cmapper.run(e, BoardSvo.BoardInfo.class)).limit(1)
+                .collect(Collectors.toList());
+        boardOutVo.setPageData(pageData);
+        boardOutVo.setBoardInfoList(boardInfoList);
+        return boardOutVo;
+    }
+
+    /**
+     *
+     * @name     : BoardSvc.findAllBoardList
+     * @author   : JuHeon Kim
+     * @param    :
+     * @return   :
+     **/
+    @Transactional
+    public BoardSvo.BoardOutVo findCommentById(@Valid BoardSvo.BoardInVo inVo) throws Exception {
+        Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
+                Sort.by(Sort.Direction.ASC, "crtDtm")
+                        .and(Sort.by(Sort.Direction.ASC, "id")
+                                .and(Sort.by(Sort.Direction.ASC, "depthNo")
+                                        .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
+        Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
+        spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
+        if (!("".equals(inVo.getId()) || inVo.getId() == null)) {
+            spec = spec.and(TbBoardMasterSpec.equalId(inVo.getId()));
+        }
+        Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
+        List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
+        List<BoardSvo.BoardInfo> boardInfoList = new ArrayList<>();
+        this.getCommentList(boardDto, boardInfoList);
         BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
         PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
         boardOutVo.setPageData(pageData);
@@ -117,6 +182,21 @@ public class BoardSvc {
             BoardSvo.BoardInfo outVo = cmapper.run(e, BoardSvo.BoardInfo.class);
             outVo.setParentBoradId(e.getParentId() != null ? e.getParentId().getId() : Long.valueOf(0));
             OutVoList.add(outVo);
+            if (e.getChild().size() != 0) {
+                getParallelList(e.getChild(), OutVoList);
+            }
+        });
+    }
+
+    /**
+     *
+     * @name     : BoardSvc.getBoardList
+     * @author   : JuHeon Kim
+     * @param    :
+     * @return   :
+     **/
+    public void getCommentList(List<TbBoardMasterDto> dtoList, List<BoardSvo.BoardInfo> OutVoList) {
+        dtoList.stream().forEach(e -> {
             if (e.getChild().size() != 0) {
                 getParallelList(e.getChild(), OutVoList);
             }

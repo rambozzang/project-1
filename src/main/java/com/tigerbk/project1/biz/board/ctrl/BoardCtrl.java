@@ -48,7 +48,7 @@ public class BoardCtrl {
     * @param    : 
     * @return   :
     **/
-    @Operation(summary = "01.통합게시판 병렬형 조회", description = "\n### 통합게시판 조회 서비스 API")
+    @Operation(summary = "01.통합게시판 병렬형 전체 조회", description = "\n### 통합게시판 조회 서비스 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "통합게시판 조회 성공", content = @Content(schema = @Schema(implementation = BoardCvo.BoardInVo.class))),
     })
@@ -57,6 +57,52 @@ public class BoardCtrl {
         try {
             BoardSvo.BoardInVo inSvo = cmapper.run(inCvo, BoardSvo.BoardInVo.class);
             return ResData.SUCCESS(boardSvc.findAllPallelList(inSvo),"통합게시판 정상 조회하였습니다.");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            return ResData.FAIL(e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @name     : BoardCtrl.searchBoardList
+     * @author   : JuHeon Kim
+     * @param    :
+     * @return   :
+     **/
+    @Operation(summary = "02.통합게시판 원글 조회", description = "\n### 통합게시판 원글 조회 서비스 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "통합게시판 조회 성공", content = @Content(schema = @Schema(implementation = BoardCvo.BoardInVo.class))),
+    })
+    @PostMapping(value = "/board/searchOriginById")
+    public ResponseEntity<?> searchOriginById(@RequestBody BoardCvo.BoardInVo inCvo) throws Exception {
+        try {
+            BoardSvo.BoardInVo inSvo = cmapper.run(inCvo, BoardSvo.BoardInVo.class);
+            return ResData.SUCCESS(boardSvc.findOriginById(inSvo),"통합게시판 정상 조회하였습니다.");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            return ResData.FAIL(e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @name     : BoardCtrl.searchBoardList
+     * @author   : JuHeon Kim
+     * @param    :
+     * @return   :
+     **/
+    @Operation(summary = "03.통합게시판 댓글 조회", description = "\n### 통합게시판 원글 조회 서비스 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "통합게시판 조회 성공", content = @Content(schema = @Schema(implementation = BoardCvo.BoardInVo.class))),
+    })
+    @PostMapping(value = "/board/searchCommentById")
+    public ResponseEntity<?> searchCommentById(@RequestBody BoardCvo.BoardInVo inCvo) throws Exception {
+        try {
+            BoardSvo.BoardInVo inSvo = cmapper.run(inCvo, BoardSvo.BoardInVo.class);
+            return ResData.SUCCESS(boardSvc.findCommentById(inSvo),"통합게시판 정상 조회하였습니다.");
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
