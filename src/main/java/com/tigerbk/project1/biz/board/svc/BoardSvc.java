@@ -91,7 +91,12 @@ public class BoardSvc {
         Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
         List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
         BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
-        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        PageResData.PageData pageData = new PageResData.PageData();
+        pageData.setCurrPageNum(boardPage.getNumber());
+        pageData.setTotalPageNum(boardPage.getTotalPages());
+        pageData.setTotalElements(boardPage.getTotalElements());
+        pageData.setPageSize(boardPage.getSize());
+        pageData.setLast(boardPage.isLast());
         List<BoardSvo.BoardInfo> boardInfoList = boardDto.stream()
                 .map(e -> cmapper.run(e, BoardSvo.BoardInfo.class))
                 .collect(Collectors.toList());
@@ -122,7 +127,12 @@ public class BoardSvc {
         Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
         List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
         BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
-        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        PageResData.PageData pageData = new PageResData.PageData();
+        pageData.setCurrPageNum(boardPage.getNumber());
+        pageData.setTotalPageNum(boardPage.getTotalPages());
+        pageData.setTotalElements(boardPage.getTotalElements());
+        pageData.setPageSize(boardPage.getSize());
+        pageData.setLast(boardPage.isLast());
         List<BoardSvo.BoardInfo> boardInfoList = boardDto.stream()
                 .map(e -> cmapper.run(e, BoardSvo.BoardInfo.class)).limit(1)
                 .collect(Collectors.toList());
@@ -156,7 +166,12 @@ public class BoardSvc {
         List<BoardSvo.BoardInfo> boardInfoList = new ArrayList<>();
         this.getCommentList(boardDto, boardInfoList);
         BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
-        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        PageResData.PageData pageData = new PageResData.PageData();
+        pageData.setCurrPageNum(boardPage.getNumber());
+        pageData.setTotalPageNum(boardPage.getTotalPages());
+        pageData.setTotalElements(boardPage.getTotalElements());
+        pageData.setPageSize(boardPage.getSize());
+        pageData.setLast(boardPage.isLast());
         boardOutVo.setPageData(pageData);
         boardOutVo.setBoardInfoList(boardInfoList);
         return boardOutVo;
