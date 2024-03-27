@@ -73,6 +73,34 @@ public class BoardSvc {
     }
 
     /**
+    *
+    * @name     :BoardSvc.findOriginListById
+    * @author   :JuheonKim
+    * @param    :
+    * @return   :
+    **/
+    @Transactional
+    public BoardSvo.BoardOutVo findOriginList(@Valid BoardSvo.BoardInVo inVo) throws Exception {
+        Pageable pageable = PageRequest.of(inVo.getPageNum(), inVo.getPageSize(),
+                Sort.by(Sort.Direction.ASC, "crtDtm")
+                        .and(Sort.by(Sort.Direction.ASC, "id")
+                                .and(Sort.by(Sort.Direction.ASC, "depthNo")
+                                        .and(Sort.by(Sort.Direction.ASC, "sortNo")))));
+        Specification<TbBoardMaster> spec = (root, query, criteriaBuilder) -> null;
+        spec = spec.and(TbBoardMasterSpec.equalSortNo(Integer.valueOf(0)));
+        Page<TbBoardMaster> boardPage = tbBoardMasterRepository.findAll(spec, pageable);
+        List<TbBoardMasterDto> boardDto = TbBoardMasterMapper.INSTANCE.toDtoList(boardPage.getContent());
+        BoardSvo.BoardOutVo boardOutVo = new BoardSvo.BoardOutVo();
+        PageResData.PageData pageData = cmapper.run(boardPage, PageResData.PageData.class);
+        List<BoardSvo.BoardInfo> boardInfoList = boardDto.stream()
+                .map(e -> cmapper.run(e, BoardSvo.BoardInfo.class))
+                .collect(Collectors.toList());
+        boardOutVo.setPageData(pageData);
+        boardOutVo.setBoardInfoList(boardInfoList);
+        return boardOutVo;
+    }
+
+    /**
      *
      * @name     : BoardSvc.findAllBoardList
      * @author   : JuHeon Kim
@@ -102,6 +130,7 @@ public class BoardSvc {
         boardOutVo.setBoardInfoList(boardInfoList);
         return boardOutVo;
     }
+
 
     /**
      *
