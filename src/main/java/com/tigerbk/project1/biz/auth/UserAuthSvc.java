@@ -50,11 +50,11 @@ public class UserAuthSvc {
         return (UserPrincipal) principal;
     }
 
-    public static String getUserId() {
+    public static String getCustId() {
         return getStaticSession().getCustId();
     }
 
-    public static String getUserNm() {
+    public static String getCustNm() {
         return getStaticSession().getCustNm();
     }
 
